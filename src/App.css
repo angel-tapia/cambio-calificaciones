@@ -2,6 +2,20 @@
   text-align: center;
 }
 
+.imagefcfm {
+  max-width: 450px;
+  max-height: 450px;
+  justify-content: center;
+}
+
+.imageuanl {
+  max-width: 450px;
+  max-height: 450px;
+  position: absolute; /* or 'fixed' if you want it to stay in place on scroll */
+  top: 0;
+  right: 0;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
