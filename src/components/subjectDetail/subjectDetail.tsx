@@ -2,12 +2,18 @@ import React from 'react';
 import { ShimmeredDetailsList } from '@fluentui/react/lib/ShimmeredDetailsList';
 import { IColumn } from '@fluentui/react/lib/DetailsList';
 import { IStackTokens, Stack, Text } from '@fluentui/react';
-import { MateriaAlumnos, MateriaProfesor } from '../../models';
+import {
+  Alumno,
+  MateriaAlumnos,
+  MateriaProfesor,
+  Profesor,
+} from '../../models';
 import {
   getMateriaByKeyAndGroup420,
   getMateriaByKeyAndGroup430,
   getMateriaByKeyAndGroup440,
 } from 'src/hooks/getAlumnos';
+import ChangeRequest from '../changeRequest/changeRequest';
 
 const stackTokens: IStackTokens = {
   childrenGap: 20,
@@ -39,13 +45,21 @@ const columns: IColumn[] = [
 ];
 
 type Props = {
+  profesor: Profesor;
   subject: MateriaProfesor;
 };
 
-const SubjectDetail: React.FC<Props> = ({ subject }) => {
+const SubjectDetail: React.FC<Props> = ({ profesor, subject }) => {
+  const [selectedAlumno, setSelectedAlumno] = React.useState<Alumno | null>(
+    null
+  );
   const plan = subject.Plan;
   let materiaAlumno: MateriaAlumnos | undefined = undefined;
-  console.log(plan + ' ' + subject.ClaveMateria + ' ' + subject.Grupo);
+
+  const handleItemClick = (item: Alumno) => {
+    setSelectedAlumno(item);
+  };
+
   switch (plan) {
     case '2015':
       materiaAlumno = getMateriaByKeyAndGroup420(
@@ -69,9 +83,20 @@ const SubjectDetail: React.FC<Props> = ({ subject }) => {
       materiaAlumno = undefined;
   }
 
-  console.log(materiaAlumno);
   if (!materiaAlumno) {
-    return <Text>No hay alumnos inscritos en esta materia</Text>;
+    return (
+      <Text variant="xLarge">No hay alumnos inscritos en esta materia</Text>
+    );
+  }
+
+  if (selectedAlumno) {
+    return (
+      <ChangeRequest
+        alumno={selectedAlumno}
+        materiaAlumno={materiaAlumno}
+        profesor={profesor}
+      />
+    );
   }
 
   return (
@@ -86,6 +111,7 @@ const SubjectDetail: React.FC<Props> = ({ subject }) => {
         columns={columns}
         layoutMode={1}
         enableShimmer={false}
+        onItemInvoked={handleItemClick}
       />
     </Stack>
   );

@@ -1,19 +1,29 @@
 import React from 'react';
+import { Alumno, MateriaAlumnos, Profesor } from 'src/models';
 
 // Define the props interface
-interface GreetingProps {
-  name: string;
+interface Props {
+  alumno: Alumno;
+  materiaAlumno: MateriaAlumnos;
+  profesor: Profesor;
 }
 
 // Define the functional component
-const Greeting: React.FC<GreetingProps> = ({ name }) => {
+const ChangeRequest: React.FC<Props> = ({
+  alumno,
+  materiaAlumno,
+  profesor,
+}) => {
   return (
     <div>
-      <h1>Hello, {name}!</h1>
-      <p>Welcome to the React TypeScript example.</p>
+      <h1>
+        {alumno.Nombre} {alumno.Matricula} {materiaAlumno.ClaveMateria}{' '}
+        {materiaAlumno.Grupo} {profesor.NombreMaestro}
+        {alumno.Oportunidad} {materiaAlumno.NombreMateria} {profesor.EmployeeId}
+      </h1>
     </div>
   );
 };
 
 // Export the component as default
-export default Greeting;
+export default ChangeRequest;

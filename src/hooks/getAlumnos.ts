@@ -23,8 +23,9 @@ export function getMateriaByKeyAndGroup430(
   if (Group.length === 2) {
     Group = '0' + Group;
   }
-
+  console.log(Key + ' ' + Group);
   return dataPlan430.find((materia: MateriaAlumnos) => {
+    console.log('Checking: ' + materia.ClaveMateria + ' ' + materia.Grupo);
     return materia.ClaveMateria === Key && materia.Grupo === Group;
   });
 }

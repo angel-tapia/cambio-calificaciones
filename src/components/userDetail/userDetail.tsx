@@ -60,7 +60,7 @@ const UserDetail: React.FC<Props> = ({ employeeId }) => {
   };
 
   if (selectedSubject) {
-    return <SubjectDetail subject={selectedSubject} />;
+    return <SubjectDetail profesor={profesor!} subject={selectedSubject} />;
   }
 
   return (
