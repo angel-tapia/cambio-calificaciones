@@ -54,6 +54,7 @@ const Login: React.FC = () => {
     if (handleValidation(employeeId, password)) {
       return;
     }
+
     setIsLogged(true);
   };
 

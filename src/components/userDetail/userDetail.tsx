@@ -6,8 +6,9 @@ import {
   Text,
 } from '@fluentui/react';
 import React, { useState } from 'react';
-import { Materia } from '../../models';
 import SubjectDetail from '../subjectDetail/subjectDetail';
+import { getProfessorByEmployeeId } from '../../hooks/getMaterias';
+import { MateriaProfesor, Profesor } from '../../models';
 
 const stackTokens: IStackTokens = {
   childrenGap: 20,
@@ -45,23 +46,16 @@ const columns: IColumn[] = [
   },
 ];
 
-// Dummy items array
-const items = new Array(10).fill(null).map((_, index) => ({
-  key: index,
-  ClaveMateria: `Dummy ${index}`,
-  NombreMateria: `Subject ${index}`,
-  Grupo: `G${index}`,
-  Plan: `Plan ${index}`,
-}));
-
 type Props = {
   employeeId: string;
 };
 
 const UserDetail: React.FC<Props> = ({ employeeId }) => {
-  const [selectedSubject, setSelectedSubject] = useState<Materia | null>(null);
+  const [selectedSubject, setSelectedSubject] =
+    useState<MateriaProfesor | null>(null);
+  const profesor: Profesor | undefined = getProfessorByEmployeeId(employeeId);
 
-  const handleItemClick = (item: Materia) => {
+  const handleItemClick = (item: MateriaProfesor) => {
     setSelectedSubject(item);
   };
 
@@ -72,11 +66,11 @@ const UserDetail: React.FC<Props> = ({ employeeId }) => {
   return (
     <Stack tokens={stackTokens}>
       <Stack horizontal tokens={stackTokens}>
-        <Text variant="xLarge">Professor Name: Angel Tapia</Text>
-        <Text variant="xLarge">Employee ID: {employeeId}</Text>
+        <Text variant="xLarge">Nombre profesor: {profesor!.NombreMaestro}</Text>
+        <Text variant="xLarge">ID del empleado: {employeeId}</Text>
       </Stack>
       <ShimmeredDetailsList
-        items={items}
+        items={profesor!.Materias}
         columns={columns}
         setKey="set"
         layoutMode={0}
