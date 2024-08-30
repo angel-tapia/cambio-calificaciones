@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Stack,
   TextField,
@@ -6,6 +6,9 @@ import {
   IStackTokens,
   IStackStyles,
   PrimaryButton,
+  Popup,
+  DefaultButton,
+  FocusTrapZone,
 } from '@fluentui/react';
 import { Alumno, MateriaAlumnos, Profesor } from 'src/models';
 
@@ -49,14 +52,15 @@ const ChangeRequest: React.FC<Props> = ({
   profesor,
 }) => {
   const [calificacionIncorrecta, setCalificacionIncorrecta] =
-    React.useState<string>('');
-  const [calificacionCorrecta, setCalificacionCorrecta] =
-    React.useState<string>('');
-  const [motivo, setMotivo] = React.useState<string>('');
+    useState<string>('');
+  const [calificacionCorrecta, setCalificacionCorrecta] = useState<string>('');
+  const [motivo, setMotivo] = useState<string>('');
   const [errorCalificacionIncorrecta, setErrorCalificacionIncorrecta] =
-    React.useState<string | undefined>(undefined);
-  const [errorCalificacionCorrecta, setErrorCalificacionCorrecta] =
-    React.useState<string | undefined>(undefined);
+    useState<string | undefined>(undefined);
+  const [errorCalificacionCorrecta, setErrorCalificacionCorrecta] = useState<
+    string | undefined
+  >(undefined);
+  const [isPopupVisible, setIsPopupVisible] = useState<boolean>(false);
 
   const validateCalificacion = (calificacion: string) => {
     if (!calificacion) {
@@ -116,7 +120,6 @@ const ChangeRequest: React.FC<Props> = ({
             <Text>{alumno.Oportunidad}</Text>
           </Stack>
         </Stack>
-
         <Stack horizontal tokens={stackTokensHorizontal}>
           <TextField
             label="Calificación Incorrecta"
@@ -139,7 +142,6 @@ const ChangeRequest: React.FC<Props> = ({
             errorMessage={errorCalificacionCorrecta}
           />
         </Stack>
-
         <TextField
           label="Motivo"
           multiline
@@ -148,8 +150,48 @@ const ChangeRequest: React.FC<Props> = ({
             setMotivo(newValue || '');
           }}
         />
-        <PrimaryButton>Enviar solicitud</PrimaryButton>
+        <PrimaryButton
+          onClick={() => {
+            setIsPopupVisible(true);
+          }}
+        >
+          Enviar solicitud
+        </PrimaryButton>
       </Stack>
+      {isPopupVisible && (
+        <Popup
+          role="dialog"
+          onDismiss={() => setIsPopupVisible(false)}
+          aria-modal="true"
+        >
+          <FocusTrapZone>
+            <Stack tokens={stackTokensVertical}>
+              <Text style={{ fontWeight: 'bold' }}>
+                ¿Está seguro de solicitar estos cambios?
+              </Text>
+              <Text>Calificación Incorrecta: {calificacionIncorrecta}</Text>
+              <Text>Calificación Correcta: {calificacionCorrecta}</Text>
+              <Text>Motivo: {motivo}</Text>
+              <Stack horizontal tokens={stackTokensHorizontal}>
+                <DefaultButton
+                  onClick={() => {
+                    setIsPopupVisible(false);
+                  }}
+                >
+                  Cancelar
+                </DefaultButton>
+                <PrimaryButton
+                  onClick={() => {
+                    setIsPopupVisible(false);
+                  }}
+                >
+                  Confirmar
+                </PrimaryButton>
+              </Stack>
+            </Stack>
+          </FocusTrapZone>
+        </Popup>
+      )}
     </Stack>
   );
 };
