@@ -6,9 +6,10 @@ import {
   IStackTokens,
   IStackStyles,
   PrimaryButton,
-  Popup,
   DefaultButton,
-  FocusTrapZone,
+  Dialog,
+  DialogType,
+  DialogFooter,
 } from '@fluentui/react';
 import { Alumno, MateriaAlumnos, Profesor } from 'src/models';
 
@@ -60,7 +61,7 @@ const ChangeRequest: React.FC<Props> = ({
   const [errorCalificacionCorrecta, setErrorCalificacionCorrecta] = useState<
     string | undefined
   >(undefined);
-  const [isPopupVisible, setIsPopupVisible] = useState<boolean>(false);
+  const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
 
   const validateCalificacion = (calificacion: string) => {
     if (!calificacion) {
@@ -152,46 +153,49 @@ const ChangeRequest: React.FC<Props> = ({
         />
         <PrimaryButton
           onClick={() => {
-            setIsPopupVisible(true);
+            if (
+              !calificacionCorrecta ||
+              !calificacionIncorrecta ||
+              !motivo ||
+              errorCalificacionCorrecta ||
+              errorCalificacionIncorrecta
+            ) {
+              return;
+            }
+            setIsDialogVisible(true);
           }}
         >
           Enviar solicitud
         </PrimaryButton>
       </Stack>
-      {isPopupVisible && (
-        <Popup
-          role="dialog"
-          onDismiss={() => setIsPopupVisible(false)}
-          aria-modal="true"
-        >
-          <FocusTrapZone>
-            <Stack tokens={stackTokensVertical}>
-              <Text style={{ fontWeight: 'bold' }}>
-                ¿Está seguro de solicitar estos cambios?
-              </Text>
-              <Text>Calificación Incorrecta: {calificacionIncorrecta}</Text>
-              <Text>Calificación Correcta: {calificacionCorrecta}</Text>
-              <Text>Motivo: {motivo}</Text>
-              <Stack horizontal tokens={stackTokensHorizontal}>
-                <DefaultButton
-                  onClick={() => {
-                    setIsPopupVisible(false);
-                  }}
-                >
-                  Cancelar
-                </DefaultButton>
-                <PrimaryButton
-                  onClick={() => {
-                    setIsPopupVisible(false);
-                  }}
-                >
-                  Confirmar
-                </PrimaryButton>
-              </Stack>
-            </Stack>
-          </FocusTrapZone>
-        </Popup>
-      )}
+      <Dialog
+        hidden={!isDialogVisible}
+        onDismiss={() => setIsDialogVisible(false)}
+        dialogContentProps={{
+          type: DialogType.normal,
+          title: '¿Está seguro de solicitar estos cambios?',
+          closeButtonAriaLabel: 'Cerrar',
+        }}
+        modalProps={{
+          isBlocking: true,
+        }}
+      >
+        <Stack tokens={stackTokensVertical}>
+          <Text>Calificación Incorrecta: {calificacionIncorrecta}</Text>
+          <Text>Calificación Correcta: {calificacionCorrecta}</Text>
+          <Text style={{ wordBreak: 'break-word' }}>Motivo: {motivo}</Text>
+          <DialogFooter>
+            <DefaultButton
+              onClick={() => setIsDialogVisible(false)}
+              text="Cancelar"
+            />
+            <PrimaryButton
+              onClick={() => setIsDialogVisible(false)}
+              text="Confirmar"
+            />
+          </DialogFooter>
+        </Stack>
+      </Dialog>
     </Stack>
   );
 };
