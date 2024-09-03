@@ -12,6 +12,8 @@ import {
   DialogFooter,
 } from '@fluentui/react';
 import { Alumno, MateriaAlumnos, Profesor } from 'src/models';
+import { createPdf } from 'src/hooks/createPdf';
+import { saveAs } from 'file-saver';
 
 const stackTokensVertical: IStackTokens = {
   childrenGap: 20,
@@ -79,12 +81,23 @@ const ChangeRequest: React.FC<Props> = ({
     return undefined;
   };
 
-  console.log(
-    'calificaciones y motivos',
-    calificacionIncorrecta,
-    calificacionCorrecta,
-    motivo
-  );
+  const handleConfirm = async () => {
+    try {
+      const response = await createPdf(
+        alumno,
+        materiaAlumno,
+        profesor,
+        calificacionIncorrecta,
+        calificacionCorrecta,
+        motivo
+      );
+      const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
+      saveAs(pdfBlob, 'solicitud_cambio.pdf');
+      setIsDialogVisible(false);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+    }
+  };
 
   return (
     <Stack styles={outerStackStyles}>
@@ -189,10 +202,7 @@ const ChangeRequest: React.FC<Props> = ({
               onClick={() => setIsDialogVisible(false)}
               text="Cancelar"
             />
-            <PrimaryButton
-              onClick={() => setIsDialogVisible(false)}
-              text="Confirmar"
-            />
+            <PrimaryButton onClick={handleConfirm} text="Confirmar" />
           </DialogFooter>
         </Stack>
       </Dialog>
