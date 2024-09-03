@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ShimmeredDetailsList } from '@fluentui/react/lib/ShimmeredDetailsList';
 import { IColumn } from '@fluentui/react/lib/DetailsList';
 import { IStackTokens, Stack, Text } from '@fluentui/react';
@@ -8,12 +8,8 @@ import {
   MateriaProfesor,
   Profesor,
 } from '../../models';
-import {
-  getMateriaByKeyAndGroup420,
-  getMateriaByKeyAndGroup430,
-  getMateriaByKeyAndGroup440,
-} from 'src/hooks/getAlumnos';
 import ChangeRequest from '../changeRequest/changeRequest';
+import { getAlumnos } from 'src/hooks/getAlumnos'; // Import the getAlumnos function
 
 const stackTokens: IStackTokens = {
   childrenGap: 20,
@@ -50,37 +46,43 @@ type Props = {
 };
 
 const SubjectDetail: React.FC<Props> = ({ profesor, subject }) => {
-  const [selectedAlumno, setSelectedAlumno] = React.useState<Alumno | null>(
-    null
-  );
-  const plan = subject.Plan;
-  let materiaAlumno: MateriaAlumnos | undefined = undefined;
+  const [selectedAlumno, setSelectedAlumno] = useState<Alumno | null>(null);
+  const [materiaAlumno, setMateriaAlumno] = useState<
+    MateriaAlumnos | undefined
+  >(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchAlumnos = async () => {
+      try {
+        const response = await getAlumnos(
+          subject.Plan,
+          subject.ClaveMateria,
+          subject.Grupo
+        );
+        setMateriaAlumno(response.data);
+      } catch (err) {
+        setError('Error fetching alumnos data.');
+        console.error('Error fetching alumnos:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAlumnos();
+  }, [subject.Plan, subject.ClaveMateria, subject.Grupo]); // Run when subject details change
 
   const handleItemClick = (item: Alumno) => {
     setSelectedAlumno(item);
   };
 
-  switch (plan) {
-    case '2015':
-      materiaAlumno = getMateriaByKeyAndGroup420(
-        subject.ClaveMateria,
-        subject.Grupo
-      );
-      break;
-    case '2021':
-      materiaAlumno = getMateriaByKeyAndGroup430(
-        subject.ClaveMateria,
-        subject.Grupo
-      );
-      break;
-    case '2022':
-      materiaAlumno = getMateriaByKeyAndGroup440(
-        subject.ClaveMateria,
-        subject.Grupo
-      );
-      break;
-    default:
-      materiaAlumno = undefined;
+  if (isLoading) {
+    return <Text variant="xLarge">Loading...</Text>;
+  }
+
+  if (error) {
+    return <Text variant="xLarge">{error}</Text>;
   }
 
   if (!materiaAlumno) {
@@ -107,7 +109,7 @@ const SubjectDetail: React.FC<Props> = ({ profesor, subject }) => {
         <Text variant="xLarge">Grupo: {subject.Grupo}</Text>
       </Stack>
       <ShimmeredDetailsList
-        items={materiaAlumno!.Alumnos}
+        items={materiaAlumno.Alumnos}
         columns={columns}
         layoutMode={1}
         enableShimmer={false}

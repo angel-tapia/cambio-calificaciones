@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import {
   IStackTokens,
   IColumn,
@@ -5,10 +6,9 @@ import {
   ShimmeredDetailsList,
   Text,
 } from '@fluentui/react';
-import React, { useState } from 'react';
 import SubjectDetail from '../subjectDetail/subjectDetail';
-import { getProfessorByEmployeeId } from '../../hooks/getMaterias';
 import { MateriaProfesor, Profesor } from '../../models';
+import { getMaterias } from 'src/hooks/getMaterias';
 
 const stackTokens: IStackTokens = {
   childrenGap: 20,
@@ -53,7 +53,24 @@ type Props = {
 const UserDetail: React.FC<Props> = ({ employeeId }) => {
   const [selectedSubject, setSelectedSubject] =
     useState<MateriaProfesor | null>(null);
-  const profesor: Profesor | undefined = getProfessorByEmployeeId(employeeId);
+  const [profesor, setProfesor] = useState<Profesor | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchMaterias = async () => {
+      try {
+        const response = await getMaterias(employeeId);
+        console.log(response.data);
+        setProfesor(response.data);
+      } catch (error) {
+        console.error('There was an error fetching the materias!', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMaterias();
+  }, [employeeId]); // The effect depends on employeeId, re-fetches if employeeId changes
 
   const handleItemClick = (item: MateriaProfesor) => {
     setSelectedSubject(item);
@@ -63,14 +80,22 @@ const UserDetail: React.FC<Props> = ({ employeeId }) => {
     return <SubjectDetail profesor={profesor!} subject={selectedSubject} />;
   }
 
+  if (isLoading) {
+    return <Text variant="xLarge">Loading...</Text>;
+  }
+
+  if (!profesor) {
+    return <Text variant="xLarge">No data available</Text>;
+  }
+
   return (
     <Stack tokens={stackTokens}>
       <Stack horizontal tokens={stackTokens}>
-        <Text variant="xLarge">Nombre profesor: {profesor!.NombreMaestro}</Text>
+        <Text variant="xLarge">Nombre profesor: {profesor.NombreMaestro}</Text>
         <Text variant="xLarge">ID del empleado: {employeeId}</Text>
       </Stack>
       <ShimmeredDetailsList
-        items={profesor!.Materias}
+        items={profesor.Materias}
         columns={columns}
         setKey="set"
         layoutMode={0}
