@@ -60,7 +60,6 @@ const UserDetail: React.FC<Props> = ({ employeeId }) => {
     const fetchMaterias = async () => {
       try {
         const response = await getMaterias(employeeId);
-        console.log(response.data);
         setProfesor(response.data);
       } catch (error) {
         console.error('There was an error fetching the materias!', error);

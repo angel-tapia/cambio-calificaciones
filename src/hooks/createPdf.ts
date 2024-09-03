@@ -7,7 +7,10 @@ const ENDPOINT = '/pdf';
 export function createPdf(
   alumno: Alumno,
   materiaAlumno: MateriaAlumnos,
-  profesor: Profesor
+  profesor: Profesor,
+  calificacionIncorrecta: string,
+  calificacionCorrecta: string,
+  motivo: string
 ) {
   const apiClient = axios.create({
     baseURL: `${BASE_URL}`,
@@ -21,5 +24,8 @@ export function createPdf(
     alumno: alumno,
     materiaAlumno: materiaAlumno,
     profesor: profesor,
+    calificacionIncorrecta: calificacionIncorrecta,
+    calificacionCorrecta: calificacionCorrecta,
+    motivo: motivo,
   });
 }
