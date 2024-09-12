@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { TextField, PrimaryButton, Stack } from '@fluentui/react';
 import './login.css';
-import UserDetail from '../userDetail/userDetail';
+import Academia from '../academia/academia';
 
 const Login: React.FC = () => {
   const [employeeId, setEmployeeId] = React.useState('');
@@ -59,7 +59,7 @@ const Login: React.FC = () => {
   };
 
   if (isLogged) {
-    return <UserDetail employeeId={employeeId} />;
+    return <Academia employeeId={employeeId} />;
   }
 
   return (

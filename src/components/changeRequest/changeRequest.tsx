@@ -14,6 +14,7 @@ import {
 import { Alumno, MateriaAlumnos, Profesor } from 'src/models';
 import { createPdf } from 'src/hooks/createPdf';
 import { saveAs } from 'file-saver';
+import { getTitleAndNameByDepartment } from 'src/utils/academiaProfesores';
 
 const stackTokensVertical: IStackTokens = {
   childrenGap: 20,
@@ -47,12 +48,14 @@ type Props = {
   alumno: Alumno;
   materiaAlumno: MateriaAlumnos;
   profesor: Profesor;
+  academia: string;
 };
 
 const ChangeRequest: React.FC<Props> = ({
   alumno,
   materiaAlumno,
   profesor,
+  academia,
 }) => {
   const [calificacionIncorrecta, setCalificacionIncorrecta] =
     useState<string>('');
@@ -65,17 +68,33 @@ const ChangeRequest: React.FC<Props> = ({
   >(undefined);
   const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
 
-  const validateCalificacion = (calificacion: string) => {
+  const validateCalificacionIncorrecta = (calificacion: string) => {
     if (!calificacion) {
-      return 'Calificación es requerida';
+      return 'Calificación es requerida.';
+    }
+
+    if (isNaN(parseInt(calificacion))) {
+      return 'Calificación debe ser un número.';
+    }
+
+    if (parseInt(calificacion) < 0 || parseInt(calificacion) > 100) {
+      return 'Calificación debe estar entre 0 y 100.';
+    }
+
+    return undefined;
+  };
+
+  const validateCalificacionCorrecta = (calificacion: string) => {
+    if (!calificacion) {
+      return 'Calificación es requerida.';
     }
 
     if (isNaN(parseFloat(calificacion))) {
-      return 'Calificación debe ser un número';
+      return 'Calificación debe ser un número.';
     }
 
-    if (parseFloat(calificacion) < 0 || parseFloat(calificacion) > 100) {
-      return 'Calificación debe estar entre 0 y 100';
+    if (parseInt(calificacion) < 0 || parseInt(calificacion) > 100) {
+      return 'Calificación debe estar entre 0 y 100.';
     }
 
     return undefined;
@@ -130,6 +149,10 @@ const ChangeRequest: React.FC<Props> = ({
             </Text>
           </Stack>
           <Stack horizontal tokens={stackTokensHorizontal}>
+            <Text style={{ fontWeight: 'bold' }}>Coordinador Academia:</Text>
+            <Text>{getTitleAndNameByDepartment(academia)}</Text>
+          </Stack>
+          <Stack horizontal tokens={stackTokensHorizontal}>
             <Text style={{ fontWeight: 'bold' }}>Oportunidad:</Text>
             <Text>{alumno.Oportunidad}</Text>
           </Stack>
@@ -139,7 +162,7 @@ const ChangeRequest: React.FC<Props> = ({
             label="Calificación Incorrecta"
             onChange={(_, newValue) => {
               setErrorCalificacionIncorrecta(
-                validateCalificacion(newValue || '')
+                validateCalificacionIncorrecta(newValue || '')
               );
               setCalificacionIncorrecta(newValue || '');
             }}
@@ -149,7 +172,7 @@ const ChangeRequest: React.FC<Props> = ({
             label="Calificación Correcta"
             onChange={(_, newValue) => {
               setErrorCalificacionCorrecta(
-                validateCalificacion(newValue || '')
+                validateCalificacionCorrecta(newValue || '')
               );
               setCalificacionCorrecta(newValue || '');
             }}

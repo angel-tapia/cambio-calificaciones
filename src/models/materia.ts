@@ -5,6 +5,7 @@ export type MateriaProfesor = {
   NombreMateria: string;
   Grupo: string;
   Plan: string;
+  Academia: string;
 };
 
 export type MateriaAlumnos = {

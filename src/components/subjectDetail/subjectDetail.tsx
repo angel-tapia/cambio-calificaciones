@@ -43,9 +43,10 @@ const columns: IColumn[] = [
 type Props = {
   profesor: Profesor;
   subject: MateriaProfesor;
+  academia: string;
 };
 
-const SubjectDetail: React.FC<Props> = ({ profesor, subject }) => {
+const SubjectDetail: React.FC<Props> = ({ profesor, subject, academia }) => {
   const [selectedAlumno, setSelectedAlumno] = useState<Alumno | null>(null);
   const [materiaAlumno, setMateriaAlumno] = useState<
     MateriaAlumnos | undefined
@@ -97,6 +98,7 @@ const SubjectDetail: React.FC<Props> = ({ profesor, subject }) => {
         alumno={selectedAlumno}
         materiaAlumno={materiaAlumno}
         profesor={profesor}
+        academia={academia}
       />
     );
   }

@@ -48,9 +48,10 @@ const columns: IColumn[] = [
 
 type Props = {
   employeeId: string;
+  academia: string;
 };
 
-const UserDetail: React.FC<Props> = ({ employeeId }) => {
+const UserDetail: React.FC<Props> = ({ employeeId, academia }) => {
   const [selectedSubject, setSelectedSubject] =
     useState<MateriaProfesor | null>(null);
   const [profesor, setProfesor] = useState<Profesor | undefined>(undefined);
@@ -60,6 +61,9 @@ const UserDetail: React.FC<Props> = ({ employeeId }) => {
     const fetchMaterias = async () => {
       try {
         const response = await getMaterias(employeeId);
+        response.data.Materias = response.data.Materias.filter(
+          (materia: MateriaProfesor) => materia.Academia === academia
+        );
         setProfesor(response.data);
       } catch (error) {
         console.error('There was an error fetching the materias!', error);
@@ -69,14 +73,20 @@ const UserDetail: React.FC<Props> = ({ employeeId }) => {
     };
 
     fetchMaterias();
-  }, [employeeId]); // The effect depends on employeeId, re-fetches if employeeId changes
+  }, [employeeId]);
 
   const handleItemClick = (item: MateriaProfesor) => {
     setSelectedSubject(item);
   };
 
   if (selectedSubject) {
-    return <SubjectDetail profesor={profesor!} subject={selectedSubject} />;
+    return (
+      <SubjectDetail
+        profesor={profesor!}
+        subject={selectedSubject}
+        academia={academia}
+      />
+    );
   }
 
   if (isLoading) {
@@ -98,7 +108,7 @@ const UserDetail: React.FC<Props> = ({ employeeId }) => {
         columns={columns}
         setKey="set"
         layoutMode={0}
-        enableShimmer={false}
+        enableShimmer={isLoading}
         onItemInvoked={handleItemClick}
       />
     </Stack>
