@@ -47,6 +47,7 @@ const outerStackStyles: IStackStyles = {
 type Props = {
   alumno: Alumno;
   materiaAlumno: MateriaAlumnos;
+  plan: string;
   profesor: Profesor;
   academia: string;
 };
@@ -54,6 +55,7 @@ type Props = {
 const ChangeRequest: React.FC<Props> = ({
   alumno,
   materiaAlumno,
+  plan,
   profesor,
   academia,
 }) => {
@@ -105,10 +107,13 @@ const ChangeRequest: React.FC<Props> = ({
       const response = await createPdf(
         alumno,
         materiaAlumno,
+        plan,
         profesor,
         calificacionIncorrecta,
         calificacionCorrecta,
-        motivo
+        motivo,
+        academia,
+        getTitleAndNameByDepartment(academia)!
       );
       const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
       saveAs(pdfBlob, 'solicitud_cambio.pdf');

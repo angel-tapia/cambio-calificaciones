@@ -2,7 +2,7 @@ import * as React from 'react';
 import fcfmLogo from '../../assets/images/fcfm.png';
 import uanlLogo from '../../assets/images/uanl.png';
 
-const Header: React.FC = () => {
+const Layout: React.FC = () => {
   return (
     <header>
       <img src={fcfmLogo} className="imagefcfm" alt="FCFM Logo" />
@@ -11,4 +11,4 @@ const Header: React.FC = () => {
   );
 };
 
-export default Header;
+export default Layout;

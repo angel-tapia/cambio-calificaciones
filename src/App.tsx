@@ -1,16 +1,19 @@
+import { useState } from 'react';
 import './App.css';
+import Layout from './components/layout/layout';
 import Login from './components/login/login';
-import Header from './components/header/header';
 import { initializeIcons } from '@fluentui/react';
 
 initializeIcons();
 
 function App() {
+  const [isLogged, setIsLogged] = useState<Boolean>(false);
+
   return (
-    <div className="container">
-      <Header />
+    <>
+      <Layout />
       <Login />
-    </div>
+    </>
   );
 }
 

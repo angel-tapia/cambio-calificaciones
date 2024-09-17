@@ -85,6 +85,7 @@ const UserDetail: React.FC<Props> = ({ employeeId, academia }) => {
         profesor={profesor!}
         subject={selectedSubject}
         academia={academia}
+        plan={selectedSubject.Plan}
       />
     );
   }

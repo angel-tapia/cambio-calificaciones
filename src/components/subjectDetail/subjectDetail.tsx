@@ -44,9 +44,15 @@ type Props = {
   profesor: Profesor;
   subject: MateriaProfesor;
   academia: string;
+  plan: string;
 };
 
-const SubjectDetail: React.FC<Props> = ({ profesor, subject, academia }) => {
+const SubjectDetail: React.FC<Props> = ({
+  profesor,
+  subject,
+  academia,
+  plan,
+}) => {
   const [selectedAlumno, setSelectedAlumno] = useState<Alumno | null>(null);
   const [materiaAlumno, setMateriaAlumno] = useState<
     MateriaAlumnos | undefined
@@ -97,6 +103,7 @@ const SubjectDetail: React.FC<Props> = ({ profesor, subject, academia }) => {
       <ChangeRequest
         alumno={selectedAlumno}
         materiaAlumno={materiaAlumno}
+        plan={plan}
         profesor={profesor}
         academia={academia}
       />
