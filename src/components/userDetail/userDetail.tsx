@@ -48,10 +48,9 @@ const columns: IColumn[] = [
 
 type Props = {
   employeeId: string;
-  academia: string;
 };
 
-const UserDetail: React.FC<Props> = ({ employeeId, academia }) => {
+const UserDetail: React.FC<Props> = ({ employeeId }) => {
   const [selectedSubject, setSelectedSubject] =
     useState<MateriaProfesor | null>(null);
   const [profesor, setProfesor] = useState<Profesor | undefined>(undefined);
@@ -61,9 +60,6 @@ const UserDetail: React.FC<Props> = ({ employeeId, academia }) => {
     const fetchMaterias = async () => {
       try {
         const response = await getMaterias(employeeId);
-        response.data.Materias = response.data.Materias.filter(
-          (materia: MateriaProfesor) => materia.Academia === academia
-        );
         setProfesor(response.data);
       } catch (error) {
         console.error('There was an error fetching the materias!', error);
@@ -84,7 +80,7 @@ const UserDetail: React.FC<Props> = ({ employeeId, academia }) => {
       <SubjectDetail
         profesor={profesor!}
         subject={selectedSubject}
-        academia={academia}
+        academia={selectedSubject.Academia}
         plan={selectedSubject.Plan}
       />
     );
