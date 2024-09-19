@@ -1,97 +1,27 @@
-import * as React from 'react';
-import { TextField, PrimaryButton, Stack } from '@fluentui/react';
-import './login.css';
-import Academia from '../academia/academia';
+import React from 'react';
 
-const Login: React.FC = () => {
-  const [employeeId, setEmployeeId] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [isLogged, setIsLogged] = React.useState(false);
-  const [errorEmployeeId, setErrorEmployeeId] = React.useState('');
-  const [errorPassword, setErrorPassword] = React.useState('');
+import { useIsAuthenticated } from '@azure/msal-react';
+import { SignInButton } from './SignInButton';
+import { SignOutButton } from './SignOutButton';
 
-  const validateEmployeeId = (employeeId: string) => {
-    if (!employeeId) {
-      return 'Employee ID is required';
-    }
-    if (employeeId.length < 5) {
-      return 'Employee ID must be at least 5 characters long';
-    }
-    return '';
-  };
-
-  const validatePassword = (password: string) => {
-    if (!password) {
-      return 'Password is required';
-    }
-    if (password.length < 8) {
-      return 'Password must be at least 8 characters long';
-    }
-    return '';
-  };
-
-  const handleValidation = (employeeId: string, password: string) => {
-    const employeeIdError = validateEmployeeId(employeeId);
-    const passwordError = validatePassword(password);
-
-    if (employeeIdError) {
-      setErrorEmployeeId(employeeIdError);
-      return true;
-    } else {
-      setErrorEmployeeId('');
-    }
-
-    if (passwordError) {
-      setErrorPassword(passwordError);
-      return true;
-    } else {
-      setErrorPassword('');
-    }
-    return false;
-  };
-
-  const handleLogin = () => {
-    if (handleValidation(employeeId, password)) {
-      return;
-    }
-
-    setIsLogged(true);
-  };
-
-  if (isLogged) {
-    return <Academia employeeId={employeeId} />;
-  }
+/**
+ * Renders the navbar component with a sign in or sign out button depending on whether or not a user is authenticated
+ * @param props
+ */
+export const Login = (props: any) => {
+  const isAuthenticated = useIsAuthenticated();
 
   return (
-    <div className="loginContainer">
-      <Stack tokens={{ childrenGap: 15 }} styles={{ root: { width: 300 } }}>
-        <TextField
-          label="Employee ID"
-          value={employeeId}
-          onChange={(_, newValue) => {
-            setEmployeeId(newValue || '');
-            setErrorEmployeeId('');
-          }}
-          errorMessage={errorEmployeeId}
-          required
-        />
-        <TextField
-          label="Password"
-          type="password"
-          canRevealPassword
-          revealPasswordAriaLabel="Show password"
-          value={password}
-          onChange={(_, newValue) => {
-            setPassword(newValue || '');
-            setErrorPassword('');
-          }}
-          errorMessage={errorPassword}
-          required
-        />
-        <PrimaryButton text="Login" onClick={handleLogin} />
-      </Stack>
-    </div>
+    <>
+      <br />
+      <br />
+      <h5>
+        <center>Bienvenido/a la página de Cambio de Calificaciones.</center>
+      </h5>
+      <br />
+      <center>{isAuthenticated ? <SignOutButton /> : <SignInButton />}</center>
+      <br />
+      {props.children}
+    </>
   );
 };
-
-export default Login;
