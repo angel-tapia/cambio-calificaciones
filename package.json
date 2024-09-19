@@ -49,14 +49,20 @@
     ]
   },
   "devDependencies": {
+    "@types/babel__core": "^7.20.5",
+    "@types/babel__generator": "^7.6.8",
+    "@types/babel__template": "^7.4.4",
+    "@types/babel__traverse": "^7.20.6",
     "@types/file-saver": "^2.0.7",
+    "@types/yargs": "^17.0.33",
+    "@types/yargs-parser": "^21.0.3",
     "@typescript-eslint/eslint-plugin": "^8.3.0",
     "@typescript-eslint/parser": "^8.3.0",
-    "eslint": "^9.9.1",
+    "eslint": "^8.0.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.35.0",
-    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-hooks": "^4.3.0",
     "prettier": "^3.3.3"
   }
 }
