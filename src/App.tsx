@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { initializeIcons, TextField } from '@fluentui/react';
+import { initializeIcons, PrimaryButton, TextField } from '@fluentui/react';
 import { loginRequest } from './authConfig';
 import { callMsGraph } from './GraphService';
 import { ProfileData } from './components/login/DisplayData';
@@ -9,7 +9,6 @@ import { useIsAuthenticated, useMsal } from '@azure/msal-react';
 
 import './App.css';
 
-import Button from 'react-bootstrap/Button';
 import { Login } from './components/login/login';
 import UserDetail from './components/userDetail/userDetail';
 
@@ -41,9 +40,9 @@ const ProfileContent = () => {
       {graphData ? (
         <ProfileData graphData={graphData} />
       ) : (
-        <Button variant="secondary" onClick={RequestProfileData}>
+        <PrimaryButton onClick={RequestProfileData}>
           Request Profile Information
-        </Button>
+        </PrimaryButton>
       )}
     </>
   );
@@ -76,9 +75,9 @@ const MainContent = () => {
             label="Matricula"
             onChange={(_e, newValue) => setMatricula(newValue || '')}
           />
-          <Button variant="primary" onClick={() => setIsFetching(true)}>
-            Ver materias
-          </Button>
+          <PrimaryButton onClick={() => setIsFetching(true)}>
+            Ver Materias
+          </PrimaryButton>
         </>
       ) : (
         <h5>Not signed in</h5>
