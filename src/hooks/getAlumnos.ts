@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { MateriaAlumnos } from 'src/models';
 
-const BASE_URL = 'http://127.0.0.1:8000';
+const BASE_URL = 'https://backend-calificaciones.vercel.app';
 const ENDPOINT = '/alumnos';
 
 export function getAlumnos(plan: string, subjectId: string, group: string) {
