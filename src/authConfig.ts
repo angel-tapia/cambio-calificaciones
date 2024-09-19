@@ -16,7 +16,7 @@ export const msalConfig = {
     clientId: '1ace8fa1-74dd-4854-b713-95c6738b5c3b',
     authority:
       'https://login.microsoftonline.com/caca9011-7b6a-44de-861f-095a2ca883b7',
-    redirectUri: 'http://localhost:3000',
+    redirectUri: 'https://cambio-calificaciones.vercel.app',
   },
   cache: {
     cacheLocation: 'sessionStorage', // This configures where your cache will be stored
