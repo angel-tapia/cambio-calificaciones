@@ -35,13 +35,13 @@ const ProfileContent = () => {
 
   return (
     <>
-      <h5 className="card-title">Welcome {accounts[0].name}</h5>
+      <h5 className="card-title">Bienvenido/a {accounts[0].name}</h5>
       <br />
       {graphData ? (
         <ProfileData graphData={graphData} />
       ) : (
         <PrimaryButton onClick={RequestProfileData}>
-          Request Profile Information
+          Ver Información del Perfil
         </PrimaryButton>
       )}
     </>
@@ -57,6 +57,7 @@ const MainContent = () => {
   const isAuthenticated = useIsAuthenticated();
   const [matricula, setMatricula] = useState<string>('');
   const [isFetching, setIsFetching] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
   if (isFetching) {
     return (
@@ -74,13 +75,24 @@ const MainContent = () => {
           <TextField
             label="Matricula"
             onChange={(_e, newValue) => setMatricula(newValue || '')}
+            errorMessage={error}
+            required={true}
           />
-          <PrimaryButton onClick={() => setIsFetching(true)}>
+          <PrimaryButton
+            onClick={() => {
+              if (!matricula) {
+                setError('Por favor ingrese una matrícula.');
+                return;
+              }
+              setError('');
+              setIsFetching(true);
+            }}
+          >
             Ver Materias
           </PrimaryButton>
         </>
       ) : (
-        <h5>Not signed in</h5>
+        <h5>Iniciar sesión</h5>
       )}
     </div>
   );
