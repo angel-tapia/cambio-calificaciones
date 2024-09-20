@@ -23,15 +23,18 @@ export function createPdf(
     responseType: 'blob',
   });
 
-  return apiClient.post(ENDPOINT, {
-    alumno: alumno,
-    materiaAlumno: materiaAlumno,
+  // Build the query string with all required parameters
+  const queryParams = new URLSearchParams({
+    alumno: JSON.stringify(alumno), // Convert complex objects to string if needed
+    materiaAlumno: JSON.stringify(materiaAlumno),
     plan: plan,
-    profesor: profesor,
+    profesor: JSON.stringify(profesor),
     calificacionIncorrecta: calificacionIncorrecta,
     calificacionCorrecta: calificacionCorrecta,
     motivo: motivo,
     academia: academia,
     nombreCoordinador: nombreCoordinador,
   });
+
+  return apiClient.get(`${ENDPOINT}?${queryParams.toString()}`);
 }
