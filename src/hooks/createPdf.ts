@@ -16,25 +16,22 @@ export function createPdf(
   nombreCoordinador: string
 ) {
   const apiClient = axios.create({
-    baseURL: `${BASE_URL}`,
+    baseURL: ${BASE_URL},
     headers: {
       'Content-Type': 'application/json',
     },
     responseType: 'blob',
   });
 
-  // Build the query string with all required parameters
-  const queryParams = new URLSearchParams({
-    alumno: JSON.stringify(alumno), // Convert complex objects to string if needed
-    materiaAlumno: JSON.stringify(materiaAlumno),
+  return apiClient.post(ENDPOINT, {
+    alumno: alumno,
+    materiaAlumno: materiaAlumno,
     plan: plan,
-    profesor: JSON.stringify(profesor),
+    profesor: profesor,
     calificacionIncorrecta: calificacionIncorrecta,
     calificacionCorrecta: calificacionCorrecta,
     motivo: motivo,
     academia: academia,
     nombreCoordinador: nombreCoordinador,
   });
-
-  return apiClient.get(`${ENDPOINT}?${queryParams.toString()}`);
 }
