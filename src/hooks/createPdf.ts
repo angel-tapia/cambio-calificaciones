@@ -23,7 +23,7 @@ export function createPdf(
     responseType: 'blob',
   });
 
-  return apiClient.post(ENDPOINT, {
+  return apiClient.put(ENDPOINT, {
     alumno: alumno,
     materiaAlumno: materiaAlumno,
     plan: plan,
