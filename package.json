@@ -1,7 +1,6 @@
 {
   "name": "cambio-calificaciones",
   "version": "0.1.0",
-  "homepage": "https://angel-tapia.github.io/cambio-calificaciones",
   "private": true,
   "dependencies": {
     "@azure/msal-browser": "^3.23.0",
