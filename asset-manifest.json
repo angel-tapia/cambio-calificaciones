@@ -1,12 +1,12 @@
 {
   "files": {
     "main.css": "/cambio-calificaciones/static/css/main.1e25b3da.css",
-    "main.js": "/cambio-calificaciones/static/js/main.697c1067.js",
+    "main.js": "/cambio-calificaciones/static/js/main.d46da4c8.js",
     "static/js/206.a9ec95bd.chunk.js": "/cambio-calificaciones/static/js/206.a9ec95bd.chunk.js",
     "index.html": "/cambio-calificaciones/index.html"
   },
   "entrypoints": [
     "static/css/main.1e25b3da.css",
-    "static/js/main.697c1067.js"
+    "static/js/main.d46da4c8.js"
   ]
 }
