@@ -1,6 +1,7 @@
 {
   "name": "cambio-calificaciones",
   "version": "0.1.0",
+  "homepage": "https://angel-tapia.github.io/cambio-calificaciones",
   "private": true,
   "dependencies": {
     "@azure/msal-browser": "^3.23.0",
@@ -15,6 +16,7 @@
     "axios": "^1.7.5",
     "bootstrap": "^5.3.3",
     "file-saver": "^2.0.5",
+    "gh-pages": "^6.1.1",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.4",
     "react-dom": "^18.3.1",
@@ -24,6 +26,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -56,13 +60,13 @@
     "@types/react": "^18.3.8",
     "@types/yargs": "^17.0.33",
     "@types/yargs-parser": "^21.0.3",
-    "@typescript-eslint/eslint-plugin": "^8.3.0",
-    "@typescript-eslint/parser": "^8.3.0",
-    "eslint": "^8.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.6.0",
+    "@typescript-eslint/parser": "^8.6.0",
+    "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
-    "eslint-plugin-react": "^7.35.0",
-    "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-react": "^7.36.1",
+    "eslint-plugin-react-hooks": "^4.6.2",
     "prettier": "^3.3.3"
   }
 }

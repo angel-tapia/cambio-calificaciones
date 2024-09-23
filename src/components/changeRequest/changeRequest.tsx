@@ -12,7 +12,7 @@ import {
   DialogFooter,
 } from '@fluentui/react';
 import { Alumno, MateriaAlumnos, Profesor } from 'src/models';
-import { createPdf } from 'src/hooks/createPdf';
+import { createPdf } from 'src/endpoints/createPdf';
 import { saveAs } from 'file-saver';
 import { getTitleAndNameByDepartment } from 'src/utils/academiaProfesores';
 

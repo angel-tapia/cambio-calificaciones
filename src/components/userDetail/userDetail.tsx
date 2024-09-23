@@ -8,7 +8,7 @@ import {
 } from '@fluentui/react';
 import SubjectDetail from '../subjectDetail/subjectDetail';
 import { MateriaProfesor, Profesor } from '../../models';
-import { getMaterias } from 'src/hooks/getMaterias';
+import { getMaterias } from 'src/endpoints/getMaterias';
 
 const stackTokens: IStackTokens = {
   childrenGap: 20,
