@@ -9,7 +9,7 @@ import {
   Profesor,
 } from '../../models';
 import ChangeRequest from '../changeRequest/changeRequest';
-import { getAlumnos } from 'src/endpoints/getAlumnos'; // Import the getAlumnos function
+import { getAlumnos } from 'src/endpoints/getAlumnos';
 
 const stackTokens: IStackTokens = {
   childrenGap: 20,
