@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Alumno, MateriaAlumnos, Profesor } from 'src/models';
 
-const BASE_URL = 'https://backend-calificaciones.vercel.app';
+const BASE_URL = process.env.BACKEND_API_URL;
 const ENDPOINT = '/api/pdf';
 
 export function createPdf(
