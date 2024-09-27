@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Profesor } from 'src/models';
 
-const BASE_URL = process.env.REACT_APP_BACKEND_API_URL;
+const BASE_URL = 'https://backcalificaciones.fly.dev';
 const ENDPOINT = '/api/materias';
 
 export function getMaterias(employeeId: string) {
