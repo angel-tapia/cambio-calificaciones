@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { MateriaAlumnos } from 'src/models';
 
-const BASE_URL = process.env.BACKEND_API_URL;
+const BASE_URL = process.env.REACT_APP_BACKEND_API_URL;
 const ENDPOINT = '/api/alumnos';
 
 export function getAlumnos(plan: string, subjectId: string, group: string) {
