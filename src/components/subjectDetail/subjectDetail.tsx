@@ -7,6 +7,7 @@ import {
   IStackTokens,
   Stack,
   Text,
+  PrimaryButton,
 } from '@fluentui/react';
 import {
   Alumno,
@@ -66,6 +67,7 @@ const SubjectDetail: React.FC<Props> = ({
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selectionError, setSelectionError] = useState<string | null>(null);
+  const [showChangeRequest, setShowChangeRequest] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchAlumnos = async () => {
@@ -124,7 +126,7 @@ const SubjectDetail: React.FC<Props> = ({
     );
   }
 
-  if (selectedAlumnos.length > 0) {
+  if (showChangeRequest) {
     return (
       <ChangeRequest
         alumnos={selectedAlumnos}
@@ -142,6 +144,12 @@ const SubjectDetail: React.FC<Props> = ({
         <Text variant="xLarge">Materia: {subject.NombreMateria}</Text>
         <Text variant="xLarge">Clave Materia: {subject.ClaveMateria}</Text>
         <Text variant="xLarge">Grupo: {subject.Grupo}</Text>
+        <PrimaryButton
+          className="align-right"
+          onClick={() => setShowChangeRequest(true)}
+        >
+          Cambiar Calificación
+        </PrimaryButton>
       </Stack>
       {selectionError && (
         <Text variant="smallPlus" styles={{ root: { color: 'red' } }}>
