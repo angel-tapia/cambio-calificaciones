@@ -103,8 +103,9 @@ const SubjectDetail: React.FC<Props> = ({
       canSelectItem: () => {
         const selectedCount = selection.current.getSelectedCount();
 
-        if (selectedCount >= 5) {
+        if (selectedCount > 5) {
           setSelectionError('Puedes seleccionar hasta 5 alumnos solamente.');
+          selection.current.getSelectedIndices().pop();
           return false;
         }
 
