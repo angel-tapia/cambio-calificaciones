@@ -106,7 +106,6 @@ const SubjectDetail: React.FC<Props> = ({
           setSelectedAlumnos(selectedItems);
           setSelectionError(null);
         } else {
-          // Deselect the last selected item
           const lastSelectedIndex = selection.current
             .getSelectedIndices()
             .pop();
@@ -151,8 +150,13 @@ const SubjectDetail: React.FC<Props> = ({
         <Text variant="xLarge">Materia: {subject.NombreMateria}</Text>
         <Text variant="xLarge">Clave Materia: {subject.ClaveMateria}</Text>
         <Text variant="xLarge">Grupo: {subject.Grupo}</Text>
+        {selectionError && (
+          <Text variant="smallPlus" styles={{ root: { color: 'red' } }}>
+            {selectionError}
+          </Text>
+        )}
         <PrimaryButton
-          className="align-right"
+          styles={{ root: { marginLeft: 'auto' } }}
           onClick={() => {
             if (selectedAlumnos.length === 0) {
               setSelectionError('Debe seleccionar al menos un alumno.');
@@ -164,11 +168,6 @@ const SubjectDetail: React.FC<Props> = ({
           Cambiar Calificación
         </PrimaryButton>
       </Stack>
-      {selectionError && (
-        <Text variant="smallPlus" styles={{ root: { color: 'red' } }}>
-          {selectionError}
-        </Text>
-      )}
       <ShimmeredDetailsList
         items={alumnosWithKeys}
         columns={columns}
