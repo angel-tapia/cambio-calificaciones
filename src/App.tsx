@@ -20,13 +20,12 @@ const MainContent = () => {
     if (isAuthenticated) {
       const fetchMatricula = async () => {
         try {
-          const employeeEmail = accounts[0].username; // Get the email from the authenticated user
+          const employeeEmail = accounts[0].username;
           const response = await getMatricula(employeeEmail);
           setMatricula(response.data);
-          setIsFetching(true); // Proceed to UserDetail component
+          setIsFetching(true);
         } catch (e: any) {
           if (e.response && e.response.status === 404) {
-            // Employee not found, show input field
             setShowMatriculaInput(true);
           } else {
             console.error('Error fetching the matricula from the email:', e);

@@ -118,8 +118,8 @@ const ChangeRequest: React.FC<Props> = ({
       const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
       saveAs(pdfBlob, 'solicitud_cambio.pdf');
       setIsDialogVisible(false);
-    } catch (error) {
-      console.error('Error generating PDF:', error);
+    } catch (error: any) {
+      throw new Error('Error generating PDF: ' + error.message);
     }
   };
 

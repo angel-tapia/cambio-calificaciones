@@ -8,7 +8,7 @@ export const SignInButton = () => {
 
   const handleLogin = () => {
     instance.loginPopup(loginRequest).catch((e) => {
-      console.log(e);
+      throw e;
     });
   };
   return <PrimaryButton onClick={() => handleLogin()}>Sign In</PrimaryButton>;

@@ -14,12 +14,20 @@ export const Login = (props: any) => {
   return (
     <>
       <br />
-      <br />
-      <h5>
-        <center>Bienvenido/a la página de Cambio de Calificaciones.</center>
-      </h5>
-      <br />
-      <center>{isAuthenticated ? <SignOutButton /> : <SignInButton />}</center>
+      <center>
+        {isAuthenticated ? (
+          <SignOutButton />
+        ) : (
+          <>
+            <h5>
+              <center>
+                Bienvenido/a a la página de Cambio de Calificaciones.
+              </center>
+            </h5>
+            <SignInButton />
+          </>
+        )}
+      </center>
       <br />
       {props.children}
     </>

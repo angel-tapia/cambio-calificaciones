@@ -97,8 +97,10 @@ const UserDetail: React.FC<Props> = ({ employeeId }) => {
   return (
     <Stack tokens={stackTokens}>
       <Stack horizontal tokens={stackTokens}>
-        <Text variant="xLarge">Nombre profesor: {profesor.NombreMaestro}</Text>
-        <Text variant="xLarge">ID del empleado: {employeeId}</Text>
+        <Text variant="xLarge">
+          Nombre profesor/a: {profesor.NombreMaestro}
+        </Text>
+        <Text variant="xLarge">Matricula: {employeeId}</Text>
       </Stack>
       <ShimmeredDetailsList
         items={profesor.Materias}
