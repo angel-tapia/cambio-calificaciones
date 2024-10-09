@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { ShimmeredDetailsList } from '@fluentui/react/lib/ShimmeredDetailsList';
-import { IColumn } from '@fluentui/react/lib/DetailsList';
-import { IStackTokens, Stack, Text } from '@fluentui/react';
+import {
+  ShimmeredDetailsList,
+  Selection,
+  SelectionMode,
+  IColumn,
+  IStackTokens,
+  Stack,
+  Text,
+} from '@fluentui/react';
 import {
   Alumno,
   MateriaAlumnos,
@@ -53,12 +59,13 @@ const SubjectDetail: React.FC<Props> = ({
   academia,
   plan,
 }) => {
-  const [selectedAlumno, setSelectedAlumno] = useState<Alumno | null>(null);
+  const [selectedAlumnos, setSelectedAlumnos] = useState<Alumno[]>([]);
   const [materiaAlumno, setMateriaAlumno] = useState<
     MateriaAlumnos | undefined
   >(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectionError, setSelectionError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchAlumnos = async () => {
@@ -80,12 +87,31 @@ const SubjectDetail: React.FC<Props> = ({
     fetchAlumnos();
   }, [subject.Plan, subject.ClaveMateria, subject.Grupo]); // Run when subject details change
 
-  const handleItemClick = (item: Alumno) => {
-    setSelectedAlumno(item);
-  };
+  const alumnosWithKeys =
+    materiaAlumno?.Alumnos.map((alumno, index) => ({
+      ...alumno,
+      key: alumno.Matricula || index,
+    })) || [];
+
+  const selection = new Selection({
+    onSelectionChanged: () => {
+      const selectedItems = selection.getSelection() as Alumno[];
+      if (selectedItems.length <= 5) {
+        setSelectedAlumnos(selectedItems);
+        setSelectionError(null);
+      } else {
+        // Deselect the last selected item
+        const lastSelectedIndex = selection.getSelectedIndices().pop();
+        if (lastSelectedIndex !== undefined) {
+          selection.setIndexSelected(lastSelectedIndex, false, false);
+        }
+        setSelectionError('Puedes seleccionar hasta 5 alumnos solamente.');
+      }
+    },
+  });
 
   if (isLoading) {
-    return <Text variant="xLarge">Loading...</Text>;
+    return <Text variant="xLarge">Cargando...</Text>;
   }
 
   if (error) {
@@ -98,10 +124,10 @@ const SubjectDetail: React.FC<Props> = ({
     );
   }
 
-  if (selectedAlumno) {
+  if (selectedAlumnos.length > 0) {
     return (
       <ChangeRequest
-        alumno={selectedAlumno}
+        alumnos={selectedAlumnos}
         materiaAlumno={materiaAlumno}
         plan={plan}
         profesor={profesor}
@@ -117,12 +143,18 @@ const SubjectDetail: React.FC<Props> = ({
         <Text variant="xLarge">Clave Materia: {subject.ClaveMateria}</Text>
         <Text variant="xLarge">Grupo: {subject.Grupo}</Text>
       </Stack>
+      {selectionError && (
+        <Text variant="smallPlus" styles={{ root: { color: 'red' } }}>
+          {selectionError}
+        </Text>
+      )}
       <ShimmeredDetailsList
-        items={materiaAlumno.Alumnos}
+        items={alumnosWithKeys}
         columns={columns}
         layoutMode={1}
         enableShimmer={false}
-        onItemInvoked={handleItemClick}
+        selection={selection}
+        selectionMode={SelectionMode.multiple}
       />
     </Stack>
   );

@@ -44,8 +44,17 @@ const outerStackStyles: IStackStyles = {
   },
 };
 
-type Props = {
+type StudentData = {
   alumno: Alumno;
+  calificacionIncorrecta: string;
+  calificacionCorrecta: string;
+  motivo: string;
+  errorCalificacionIncorrecta?: string;
+  errorCalificacionCorrecta?: string;
+};
+
+type Props = {
+  alumnos: Alumno[];
   materiaAlumno: MateriaAlumnos;
   plan: string;
   profesor: Profesor;
@@ -53,21 +62,22 @@ type Props = {
 };
 
 const ChangeRequest: React.FC<Props> = ({
-  alumno,
+  alumnos,
   materiaAlumno,
   plan,
   profesor,
   academia,
 }) => {
-  const [calificacionIncorrecta, setCalificacionIncorrecta] =
-    useState<string>('');
-  const [calificacionCorrecta, setCalificacionCorrecta] = useState<string>('');
-  const [motivo, setMotivo] = useState<string>('');
-  const [errorCalificacionIncorrecta, setErrorCalificacionIncorrecta] =
-    useState<string | undefined>(undefined);
-  const [errorCalificacionCorrecta, setErrorCalificacionCorrecta] = useState<
-    string | undefined
-  >(undefined);
+  // Initialize state for each student
+  const [studentData, setStudentData] = useState<StudentData[]>(
+    alumnos.map((alumno) => ({
+      alumno,
+      calificacionIncorrecta: '',
+      calificacionCorrecta: '',
+      motivo: '',
+    }))
+  );
+
   const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
 
   const validateCalificacionIncorrecta = (calificacion: string) => {
@@ -104,19 +114,22 @@ const ChangeRequest: React.FC<Props> = ({
 
   const handleConfirm = async () => {
     try {
-      const response = await createPdf(
-        alumno,
-        materiaAlumno,
-        plan,
-        profesor,
-        calificacionIncorrecta,
-        calificacionCorrecta,
-        motivo,
-        academia,
-        getTitleAndNameByDepartment(academia)!
-      );
-      const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
-      saveAs(pdfBlob, 'solicitud_cambio.pdf');
+      // Generate PDFs for each student
+      for (const data of studentData) {
+        const response = await createPdf(
+          data.alumno,
+          materiaAlumno,
+          plan,
+          profesor,
+          data.calificacionIncorrecta,
+          data.calificacionCorrecta,
+          data.motivo,
+          academia,
+          getTitleAndNameByDepartment(academia)!
+        );
+        const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
+        saveAs(pdfBlob, `solicitud_cambio_${data.alumno.Matricula}.pdf`);
+      }
       setIsDialogVisible(false);
     } catch (error: any) {
       throw new Error('Error generating PDF: ' + error.message);
@@ -132,77 +145,115 @@ const ChangeRequest: React.FC<Props> = ({
         >
           Solicitud de cambio
         </Text>
-        <Stack tokens={stackTokensVertical}>
-          <Stack horizontal tokens={stackTokensHorizontal}>
-            <Text style={{ fontWeight: 'bold' }}>Alumno:</Text>
-            <Text>
-              {alumno.Nombre} ({alumno.Matricula})
-            </Text>
-          </Stack>
+        {studentData.map((data, index) => (
+          <Stack key={data.alumno.Matricula} tokens={stackTokensVertical}>
+            <Stack tokens={stackTokensVertical}>
+              <Stack horizontal tokens={stackTokensHorizontal}>
+                <Text style={{ fontWeight: 'bold' }}>Alumno:</Text>
+                <Text>
+                  {data.alumno.Nombre} ({data.alumno.Matricula})
+                </Text>
+              </Stack>
 
-          <Stack horizontal tokens={stackTokensHorizontal}>
-            <Text style={{ fontWeight: 'bold' }}>Materia:</Text>
-            <Text>
-              {materiaAlumno.NombreMateria} (Clave: {materiaAlumno.ClaveMateria}
-              , Grupo: {materiaAlumno.Grupo})
-            </Text>
+              <Stack horizontal tokens={stackTokensHorizontal}>
+                <Text style={{ fontWeight: 'bold' }}>Materia:</Text>
+                <Text>
+                  {materiaAlumno.NombreMateria} (Clave:{' '}
+                  {materiaAlumno.ClaveMateria}, Grupo: {materiaAlumno.Grupo})
+                </Text>
+              </Stack>
+              <Stack horizontal tokens={stackTokensHorizontal}>
+                <Text style={{ fontWeight: 'bold' }}>Profesor:</Text>
+                <Text>
+                  {profesor.NombreMaestro} ({profesor.EmployeeId})
+                </Text>
+              </Stack>
+              <Stack horizontal tokens={stackTokensHorizontal}>
+                <Text style={{ fontWeight: 'bold' }}>
+                  Coordinador Academia:
+                </Text>
+                <Text>{getTitleAndNameByDepartment(academia)}</Text>
+              </Stack>
+              <Stack horizontal tokens={stackTokensHorizontal}>
+                <Text style={{ fontWeight: 'bold' }}>Oportunidad:</Text>
+                <Text>{data.alumno.Oportunidad}</Text>
+              </Stack>
+            </Stack>
+            <Stack horizontal tokens={stackTokensHorizontal}>
+              <TextField
+                label="Calificación Incorrecta"
+                value={data.calificacionIncorrecta}
+                onChange={(_, newValue) => {
+                  const error = validateCalificacionIncorrecta(newValue || '');
+                  const newStudentData = [...studentData];
+                  newStudentData[index] = {
+                    ...newStudentData[index],
+                    calificacionIncorrecta: newValue || '',
+                    errorCalificacionIncorrecta: error,
+                  };
+                  setStudentData(newStudentData);
+                }}
+                errorMessage={data.errorCalificacionIncorrecta}
+              />
+              <TextField
+                label="Calificación Correcta"
+                value={data.calificacionCorrecta}
+                onChange={(_, newValue) => {
+                  const error = validateCalificacionCorrecta(newValue || '');
+                  const newStudentData = [...studentData];
+                  newStudentData[index] = {
+                    ...newStudentData[index],
+                    calificacionCorrecta: newValue || '',
+                    errorCalificacionCorrecta: error,
+                  };
+                  setStudentData(newStudentData);
+                }}
+                errorMessage={data.errorCalificacionCorrecta}
+              />
+            </Stack>
+            <TextField
+              label="Motivo"
+              multiline
+              rows={4}
+              value={data.motivo}
+              onChange={(_, newValue) => {
+                const newStudentData = [...studentData];
+                newStudentData[index].motivo = newValue || '';
+                setStudentData(newStudentData);
+              }}
+            />
+            <hr />
           </Stack>
-          <Stack horizontal tokens={stackTokensHorizontal}>
-            <Text style={{ fontWeight: 'bold' }}>Profesor:</Text>
-            <Text>
-              {profesor.NombreMaestro} ({profesor.EmployeeId})
-            </Text>
-          </Stack>
-          <Stack horizontal tokens={stackTokensHorizontal}>
-            <Text style={{ fontWeight: 'bold' }}>Coordinador Academia:</Text>
-            <Text>{getTitleAndNameByDepartment(academia)}</Text>
-          </Stack>
-          <Stack horizontal tokens={stackTokensHorizontal}>
-            <Text style={{ fontWeight: 'bold' }}>Oportunidad:</Text>
-            <Text>{alumno.Oportunidad}</Text>
-          </Stack>
-        </Stack>
-        <Stack horizontal tokens={stackTokensHorizontal}>
-          <TextField
-            label="Calificación Incorrecta"
-            onChange={(_, newValue) => {
-              setErrorCalificacionIncorrecta(
-                validateCalificacionIncorrecta(newValue || '')
-              );
-              setCalificacionIncorrecta(newValue || '');
-            }}
-            errorMessage={errorCalificacionIncorrecta}
-          />
-          <TextField
-            label="Calificación Correcta"
-            onChange={(_, newValue) => {
-              setErrorCalificacionCorrecta(
-                validateCalificacionCorrecta(newValue || '')
-              );
-              setCalificacionCorrecta(newValue || '');
-            }}
-            errorMessage={errorCalificacionCorrecta}
-          />
-        </Stack>
-        <TextField
-          label="Motivo"
-          multiline
-          rows={4}
-          onChange={(_, newValue) => {
-            setMotivo(newValue || '');
-          }}
-        />
+        ))}
         <PrimaryButton
           onClick={() => {
-            if (
-              !calificacionCorrecta ||
-              !calificacionIncorrecta ||
-              !motivo ||
-              errorCalificacionCorrecta ||
-              errorCalificacionIncorrecta
-            ) {
+            // Validate data for all students
+            let hasError = false;
+            const newStudentData = studentData.map((data) => {
+              const errorCalificacionIncorrecta =
+                validateCalificacionIncorrecta(data.calificacionIncorrecta);
+              const errorCalificacionCorrecta = validateCalificacionCorrecta(
+                data.calificacionCorrecta
+              );
+              if (
+                errorCalificacionIncorrecta ||
+                errorCalificacionCorrecta ||
+                !data.motivo
+              ) {
+                hasError = true;
+              }
+              return {
+                ...data,
+                errorCalificacionIncorrecta,
+                errorCalificacionCorrecta,
+              };
+            });
+            setStudentData(newStudentData);
+
+            if (hasError) {
               return;
             }
+
             setIsDialogVisible(true);
           }}
         >
@@ -222,9 +273,21 @@ const ChangeRequest: React.FC<Props> = ({
         }}
       >
         <Stack tokens={stackTokensVertical}>
-          <Text>Calificación Incorrecta: {calificacionIncorrecta}</Text>
-          <Text>Calificación Correcta: {calificacionCorrecta}</Text>
-          <Text style={{ wordBreak: 'break-word' }}>Motivo: {motivo}</Text>
+          {studentData.map((data) => (
+            <Stack key={data.alumno.Matricula} tokens={stackTokensVertical}>
+              <Text>
+                Alumno: {data.alumno.Nombre} ({data.alumno.Matricula})
+              </Text>
+              <Text>
+                Calificación Incorrecta: {data.calificacionIncorrecta}
+              </Text>
+              <Text>Calificación Correcta: {data.calificacionCorrecta}</Text>
+              <Text style={{ wordBreak: 'break-word' }}>
+                Motivo: {data.motivo}
+              </Text>
+              <br />
+            </Stack>
+          ))}
           <DialogFooter>
             <DefaultButton
               onClick={() => setIsDialogVisible(false)}
