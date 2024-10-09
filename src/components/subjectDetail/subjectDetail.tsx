@@ -100,17 +100,8 @@ const SubjectDetail: React.FC<Props> = ({
 
   const selection = useRef<Selection>(
     new Selection({
-      canSelectItem: (item, index) => {
+      canSelectItem: () => {
         const selectedCount = selection.current.getSelectedCount();
-
-        if (index === undefined) {
-          return false;
-        }
-        const isItemSelected = selection.current.isIndexSelected(index);
-
-        if (isItemSelected) {
-          return true;
-        }
 
         if (selectedCount >= 5) {
           setSelectionError('Puedes seleccionar hasta 5 alumnos solamente.');
