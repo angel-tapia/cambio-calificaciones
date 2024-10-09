@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
   ShimmeredDetailsList,
   Selection,
@@ -89,28 +89,35 @@ const SubjectDetail: React.FC<Props> = ({
     fetchAlumnos();
   }, [subject.Plan, subject.ClaveMateria, subject.Grupo]); // Run when subject details change
 
-  const alumnosWithKeys =
-    materiaAlumno?.Alumnos.map((alumno, index) => ({
-      ...alumno,
-      key: alumno.Matricula || index,
-    })) || [];
+  const alumnosWithKeys = useMemo(
+    () =>
+      materiaAlumno?.Alumnos.map((alumno, index) => ({
+        ...alumno,
+        key: alumno.Matricula || index,
+      })) || [],
+    [materiaAlumno]
+  );
 
-  const selection = new Selection({
-    onSelectionChanged: () => {
-      const selectedItems = selection.getSelection() as Alumno[];
-      if (selectedItems.length <= 5) {
-        setSelectedAlumnos(selectedItems);
-        setSelectionError(null);
-      } else {
-        // Deselect the last selected item
-        const lastSelectedIndex = selection.getSelectedIndices().pop();
-        if (lastSelectedIndex !== undefined) {
-          selection.setIndexSelected(lastSelectedIndex, false, false);
+  const selection = useRef<Selection>(
+    new Selection({
+      onSelectionChanged: () => {
+        const selectedItems = selection.current.getSelection() as Alumno[];
+        if (selectedItems.length <= 5) {
+          setSelectedAlumnos(selectedItems);
+          setSelectionError(null);
+        } else {
+          // Deselect the last selected item
+          const lastSelectedIndex = selection.current
+            .getSelectedIndices()
+            .pop();
+          if (lastSelectedIndex !== undefined) {
+            selection.current.setIndexSelected(lastSelectedIndex, false, false);
+          }
+          setSelectionError('Puedes seleccionar hasta 5 alumnos solamente.');
         }
-        setSelectionError('Puedes seleccionar hasta 5 alumnos solamente.');
-      }
-    },
-  });
+      },
+    })
+  );
 
   if (isLoading) {
     return <Text variant="xLarge">Cargando...</Text>;
@@ -146,7 +153,13 @@ const SubjectDetail: React.FC<Props> = ({
         <Text variant="xLarge">Grupo: {subject.Grupo}</Text>
         <PrimaryButton
           className="align-right"
-          onClick={() => setShowChangeRequest(true)}
+          onClick={() => {
+            if (selectedAlumnos.length === 0) {
+              setSelectionError('Debe seleccionar al menos un alumno.');
+              return;
+            }
+            setShowChangeRequest(true);
+          }}
         >
           Cambiar Calificación
         </PrimaryButton>
@@ -161,7 +174,7 @@ const SubjectDetail: React.FC<Props> = ({
         columns={columns}
         layoutMode={1}
         enableShimmer={false}
-        selection={selection}
+        selection={selection.current}
         selectionMode={SelectionMode.multiple}
       />
     </Stack>
