@@ -100,20 +100,29 @@ const SubjectDetail: React.FC<Props> = ({
 
   const selection = useRef<Selection>(
     new Selection({
+      canSelectItem: (item, index) => {
+        const selectedCount = selection.current.getSelectedCount();
+
+        if (index === undefined) {
+          return false;
+        }
+        const isItemSelected = selection.current.isIndexSelected(index);
+
+        if (isItemSelected) {
+          return true;
+        }
+
+        if (selectedCount >= 5) {
+          setSelectionError('Puedes seleccionar hasta 5 alumnos solamente.');
+          return false;
+        }
+
+        setSelectionError(null);
+        return true;
+      },
       onSelectionChanged: () => {
         const selectedItems = selection.current.getSelection() as Alumno[];
-        if (selectedItems.length <= 5) {
-          setSelectedAlumnos(selectedItems);
-          setSelectionError(null);
-        } else {
-          const lastSelectedIndex = selection.current
-            .getSelectedIndices()
-            .pop();
-          if (lastSelectedIndex !== undefined) {
-            selection.current.setIndexSelected(lastSelectedIndex, false, false);
-          }
-          setSelectionError('Puedes seleccionar hasta 5 alumnos solamente.');
-        }
+        setSelectedAlumnos(selectedItems);
       },
     })
   );
@@ -146,7 +155,7 @@ const SubjectDetail: React.FC<Props> = ({
 
   return (
     <Stack tokens={stackTokens}>
-      <Stack horizontal tokens={stackTokens}>
+      <Stack horizontal tokens={stackTokens} horizontalAlign="space-between">
         <Text variant="xLarge">Materia: {subject.NombreMateria}</Text>
         <Text variant="xLarge">Clave Materia: {subject.ClaveMateria}</Text>
         <Text variant="xLarge">Grupo: {subject.Grupo}</Text>
