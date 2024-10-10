@@ -87,7 +87,22 @@ const SubjectDetail: React.FC<Props> = ({
     };
 
     fetchAlumnos();
-  }, [subject.Plan, subject.ClaveMateria, subject.Grupo]); // Run when subject details change
+  }, [subject.Plan, subject.ClaveMateria, subject.Grupo]);
+
+  const handleButtonClick = () => {
+    setShowChangeRequest(false);
+    if (selectedAlumnos.length === 0) {
+      setSelectionError('Debe seleccionar al menos un alumno.');
+      return;
+    }
+
+    if (selectedAlumnos.length > 5) {
+      setSelectionError('No se pueden seleccionar más de 5 alumnos.');
+      return;
+    }
+
+    setShowChangeRequest(true);
+  };
 
   const alumnosWithKeys = useMemo(
     () =>
@@ -122,21 +137,15 @@ const SubjectDetail: React.FC<Props> = ({
   }
 
   if (showChangeRequest) {
-    if (selectedAlumnos.length > 5) {
-      setShowChangeRequest(false);
-      setSelectionError('No se pueden seleccionar más de 5 alumnos.');
-    } else {
-      setSelectionError('');
-      return (
-        <ChangeRequest
-          alumnos={selectedAlumnos}
-          materiaAlumno={materiaAlumno}
-          plan={plan}
-          profesor={profesor}
-          academia={academia}
-        />
-      );
-    }
+    return (
+      <ChangeRequest
+        alumnos={selectedAlumnos}
+        materiaAlumno={materiaAlumno}
+        plan={plan}
+        profesor={profesor}
+        academia={academia}
+      />
+    );
   }
 
   return (
@@ -152,13 +161,7 @@ const SubjectDetail: React.FC<Props> = ({
         )}
         <PrimaryButton
           styles={{ root: { marginLeft: 'auto' } }}
-          onClick={() => {
-            if (selectedAlumnos.length === 0) {
-              setSelectionError('Debe seleccionar al menos un alumno.');
-              return;
-            }
-            setShowChangeRequest(true);
-          }}
+          onClick={handleButtonClick}
         >
           Cambiar Calificación
         </PrimaryButton>
