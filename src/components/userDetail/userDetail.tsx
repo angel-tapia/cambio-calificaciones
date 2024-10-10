@@ -59,6 +59,9 @@ const UserDetail: React.FC<Props> = ({ employeeId }) => {
   useEffect(() => {
     const fetchMaterias = async () => {
       try {
+        while (employeeId.length < 6) {
+          employeeId = '0' + employeeId;
+        }
         const response = await getMaterias(employeeId);
         setProfesor(response.data);
       } catch (error) {
