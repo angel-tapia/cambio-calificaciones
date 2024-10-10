@@ -24,7 +24,7 @@ export function createPdf(
   });
 
   return apiClient.post(ENDPOINT, {
-    alumno: alumno,
+    alumnos: alumnos,
     materiaAlumno: materiaAlumno,
     plan: plan,
     profesor: profesor,
