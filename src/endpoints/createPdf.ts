@@ -5,7 +5,7 @@ const BASE_URL = 'https://backcalificaciones.fly.dev';
 const ENDPOINT = '/api/pdf';
 
 export function createPdf(
-  alumno: Alumno,
+  alumnos: Alumno[],
   materiaAlumno: MateriaAlumnos,
   plan: string,
   profesor: Profesor,
