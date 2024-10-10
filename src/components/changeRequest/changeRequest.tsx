@@ -59,10 +59,13 @@ const ChangeRequest: React.FC<Props> = ({
   profesor,
   academia,
 }) => {
-  const [calificacionIncorrecta, setCalificacionIncorrecta] =
-    useState<string>('');
-  const [calificacionCorrecta, setCalificacionCorrecta] = useState<string>('');
   const [motivo, setMotivo] = useState<string>('');
+  const [calificacionesIncorrectas, setCalificacionesIncorrectas] = useState<
+    Record<string, string>
+  >({});
+  const [calificacionesCorrectas, setCalificacionesCorrectas] = useState<
+    Record<string, string>
+  >({});
   const [errorCalificacionIncorrecta, setErrorCalificacionIncorrecta] =
     useState<string | undefined>(undefined);
   const [errorCalificacionCorrecta, setErrorCalificacionCorrecta] = useState<
@@ -109,8 +112,8 @@ const ChangeRequest: React.FC<Props> = ({
         materiaAlumno,
         plan,
         profesor,
-        calificacionIncorrecta,
-        calificacionCorrecta,
+        calificacionesIncorrectas,
+        calificacionesCorrectas,
         motivo,
         academia,
         getTitleAndNameByDepartment(academia)!
@@ -156,39 +159,45 @@ const ChangeRequest: React.FC<Props> = ({
           </Stack>
         </Stack>
         {alumnos.map((alumno) => (
-          <Stack
-            key={alumno.Matricula}
-            horizontal
-            tokens={stackTokensHorizontal}
-          >
-            <Text style={{ fontWeight: 'bold' }}>Alumno:</Text>
-            <Text>
-              {alumno.Nombre} ({alumno.Matricula})
-            </Text>
+          <Stack key={alumno.Matricula} tokens={stackTokensVertical}>
+            <Stack horizontal tokens={stackTokensHorizontal}>
+              <Text style={{ fontWeight: 'bold' }}>Alumno:</Text>
+              <Text>
+                {alumno.Nombre} ({alumno.Matricula})
+              </Text>
+            </Stack>
+            <Stack horizontal tokens={stackTokensHorizontal}>
+              <TextField
+                label="Calificación Incorrecta"
+                onChange={(_, newValue) => {
+                  setErrorCalificacionIncorrecta(
+                    validateCalificacionIncorrecta(newValue || '')
+                  );
+                  setCalificacionesIncorrectas((prev) => ({
+                    ...prev,
+                    [alumno.Matricula]: newValue || '',
+                  }));
+                }}
+                errorMessage={errorCalificacionIncorrecta}
+                value={calificacionesIncorrectas[alumno.Matricula] || ''}
+              />
+              <TextField
+                label="Calificación Correcta"
+                onChange={(_, newValue) => {
+                  setErrorCalificacionCorrecta(
+                    validateCalificacionCorrecta(newValue || '')
+                  );
+                  setCalificacionesCorrectas((prev) => ({
+                    ...prev,
+                    [alumno.Matricula]: newValue || '',
+                  }));
+                }}
+                errorMessage={errorCalificacionCorrecta}
+                value={calificacionesCorrectas[alumno.Matricula] || ''}
+              />
+            </Stack>
           </Stack>
         ))}
-        <Stack horizontal tokens={stackTokensHorizontal}>
-          <TextField
-            label="Calificación Incorrecta"
-            onChange={(_, newValue) => {
-              setErrorCalificacionIncorrecta(
-                validateCalificacionIncorrecta(newValue || '')
-              );
-              setCalificacionIncorrecta(newValue || '');
-            }}
-            errorMessage={errorCalificacionIncorrecta}
-          />
-          <TextField
-            label="Calificación Correcta"
-            onChange={(_, newValue) => {
-              setErrorCalificacionCorrecta(
-                validateCalificacionCorrecta(newValue || '')
-              );
-              setCalificacionCorrecta(newValue || '');
-            }}
-            errorMessage={errorCalificacionCorrecta}
-          />
-        </Stack>
         <TextField
           label="Motivo"
           multiline
@@ -200,8 +209,8 @@ const ChangeRequest: React.FC<Props> = ({
         <PrimaryButton
           onClick={() => {
             if (
-              !calificacionCorrecta ||
-              !calificacionIncorrecta ||
+              !calificacionesCorrectas ||
+              !calificacionesIncorrectas ||
               !motivo ||
               errorCalificacionCorrecta ||
               errorCalificacionIncorrecta
@@ -227,8 +236,14 @@ const ChangeRequest: React.FC<Props> = ({
         }}
       >
         <Stack tokens={stackTokensVertical}>
-          <Text>Calificación Incorrecta: {calificacionIncorrecta}</Text>
-          <Text>Calificación Correcta: {calificacionCorrecta}</Text>
+          <Text>
+            Calificación Incorrecta:
+            {calificacionesIncorrectas[alumnos[0].Matricula]}
+          </Text>
+          <Text>
+            Calificación Correcta:
+            {calificacionesCorrectas[alumnos[0].Matricula]}
+          </Text>
           <Text style={{ wordBreak: 'break-word' }}>Motivo: {motivo}</Text>
           <DialogFooter>
             <DefaultButton
