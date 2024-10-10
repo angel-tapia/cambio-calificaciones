@@ -125,18 +125,18 @@ const SubjectDetail: React.FC<Props> = ({
     if (selectedAlumnos.length > 5) {
       setShowChangeRequest(false);
       setSelectionError('No se pueden seleccionar más de 5 alumnos.');
-      return;
+    } else {
+      setSelectionError('');
+      return (
+        <ChangeRequest
+          alumnos={selectedAlumnos}
+          materiaAlumno={materiaAlumno}
+          plan={plan}
+          profesor={profesor}
+          academia={academia}
+        />
+      );
     }
-    setSelectionError('');
-    return (
-      <ChangeRequest
-        alumnos={selectedAlumnos}
-        materiaAlumno={materiaAlumno}
-        plan={plan}
-        profesor={profesor}
-        academia={academia}
-      />
-    );
   }
 
   return (
