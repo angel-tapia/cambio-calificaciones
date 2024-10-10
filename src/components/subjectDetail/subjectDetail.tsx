@@ -100,18 +100,6 @@ const SubjectDetail: React.FC<Props> = ({
 
   const selection = useRef<Selection>(
     new Selection({
-      canSelectItem: () => {
-        const selectedCount = selection.current.getSelectedCount();
-
-        if (selectedCount > 5) {
-          setSelectionError('Puedes seleccionar hasta 5 alumnos solamente.');
-          selection.current.getSelectedIndices().pop();
-          return false;
-        }
-
-        setSelectionError(null);
-        return true;
-      },
       onSelectionChanged: () => {
         const selectedItems = selection.current.getSelection() as Alumno[];
         setSelectedAlumnos(selectedItems);
@@ -134,6 +122,12 @@ const SubjectDetail: React.FC<Props> = ({
   }
 
   if (showChangeRequest) {
+    if (selectedAlumnos.length > 5) {
+      setShowChangeRequest(false);
+      setSelectionError('No se pueden seleccionar más de 5 alumnos.');
+      return;
+    }
+    setSelectionError('');
     return (
       <ChangeRequest
         alumnos={selectedAlumnos}
@@ -152,7 +146,7 @@ const SubjectDetail: React.FC<Props> = ({
         <Text variant="xLarge">Clave Materia: {subject.ClaveMateria}</Text>
         <Text variant="xLarge">Grupo: {subject.Grupo}</Text>
         {selectionError && (
-          <Text variant="smallPlus" styles={{ root: { color: 'red' } }}>
+          <Text variant="xLarge" styles={{ root: { color: 'red' } }}>
             {selectionError}
           </Text>
         )}
