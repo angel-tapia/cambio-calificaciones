@@ -235,24 +235,29 @@ const ChangeRequest: React.FC<Props> = ({
           isBlocking: true,
         }}
       >
-        <Stack tokens={stackTokensVertical}>
-          <Text>
-            Calificación Incorrecta:
-            {calificacionesIncorrectas[alumnos[0].Matricula]}
-          </Text>
-          <Text>
-            Calificación Correcta:
-            {calificacionesCorrectas[alumnos[0].Matricula]}
-          </Text>
-          <Text style={{ wordBreak: 'break-word' }}>Motivo: {motivo}</Text>
-          <DialogFooter>
-            <DefaultButton
-              onClick={() => setIsDialogVisible(false)}
-              text="Cancelar"
-            />
-            <PrimaryButton onClick={handleConfirm} text="Confirmar" />
-          </DialogFooter>
-        </Stack>
+        {alumnos.map((alumno) => (
+          <Stack key={alumno.Matricula} tokens={stackTokensVertical}>
+            <Text>
+              Alumno: {alumno.Nombre} ({alumno.Matricula})
+            </Text>
+            <Text>
+              Calificación Incorrecta:
+              {calificacionesIncorrectas[alumno.Matricula]}
+            </Text>
+            <Text>
+              Calificación Correcta:
+              {calificacionesCorrectas[alumno.Matricula]}
+            </Text>
+          </Stack>
+        ))}
+        <Text style={{ wordBreak: 'break-word' }}>Motivo: {motivo}</Text>
+        <DialogFooter>
+          <DefaultButton
+            onClick={() => setIsDialogVisible(false)}
+            text="Cancelar"
+          />
+          <PrimaryButton onClick={handleConfirm} text="Confirmar" />
+        </DialogFooter>
       </Dialog>
     </Stack>
   );
