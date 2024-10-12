@@ -220,6 +220,12 @@ const ChangeRequest: React.FC<Props> = ({
           type: DialogType.normal,
           title: '¿Está seguro de solicitar estos cambios?',
           closeButtonAriaLabel: 'Cerrar',
+          styles: {
+            content: {
+              width: '100%', // Ensures the content takes up the full width of the dialog
+              height: '100%', // Ensures the content takes up the full height of the dialog
+            },
+          },
         }}
         modalProps={{
           isBlocking: true,
