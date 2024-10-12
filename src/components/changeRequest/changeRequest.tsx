@@ -84,14 +84,14 @@ const ChangeRequest: React.FC<Props> = ({
       calificacion !== 'NC'
     ) {
       return 'Calificación debe ser "CU" o "NC".';
-    }
+    } else {
+      if (isNaN(parseInt(calificacion)) && calificacion !== 'NP') {
+        return 'Calificación debe ser NP o un número.';
+      }
 
-    if (isNaN(parseInt(calificacion)) && calificacion !== 'NP') {
-      return 'Calificación debe ser NP o un número.';
-    }
-
-    if (parseInt(calificacion) < 0 || parseInt(calificacion) > 100) {
-      return 'Calificación debe estar entre 0 y 100.';
+      if (parseInt(calificacion) < 0 || parseInt(calificacion) > 100) {
+        return 'Calificación debe estar entre 0 y 100.';
+      }
     }
 
     return undefined;
