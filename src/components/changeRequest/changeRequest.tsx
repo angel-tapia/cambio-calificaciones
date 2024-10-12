@@ -224,13 +224,12 @@ const ChangeRequest: React.FC<Props> = ({
         modalProps={{
           isBlocking: true,
           styles: {
-            root: {
-              width: '80vw', // Adjust the width here
-              minWidth: '600px', // Minimum width for larger screens
-            },
             main: {
-              height: '80vh', // Adjust height here
-              minHeight: '500px', // Minimum height for larger screens
+              width: '80vw', // Set a percentage-based width for responsiveness
+              height: '80vh', // Set a percentage-based height for responsiveness
+              minWidth: '600px', // Ensure a minimum width
+              minHeight: '500px', // Ensure a minimum height
+              maxWidth: 'none', // Add this line to override the default maxWidth
             },
           },
         }}
