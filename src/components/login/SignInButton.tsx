@@ -11,5 +11,5 @@ export const SignInButton = () => {
       throw e;
     });
   };
-  return <PrimaryButton onClick={() => handleLogin()}>Sign In</PrimaryButton>;
+  return <PrimaryButton onClick={() => handleLogin()}>Ingresar</PrimaryButton>;
 };

@@ -16,8 +16,8 @@ export const Login = (props: any) => {
           <>
             <center>
               <h5>Bienvenido/a a la página de Cambio de Calificaciones.</h5>
+              <SignInButton />
             </center>
-            <SignInButton />
           </>
         )}
       </div>
