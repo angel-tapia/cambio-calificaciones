@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { PublicClientApplication } from '@azure/msal-browser';
 import { msalConfig } from './authConfig';
 import { MsalProvider } from '@azure/msal-react';
+import Layout from './components/layout/layout';
 
 const msalInstance = new PublicClientApplication(msalConfig);
 
@@ -14,6 +15,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
+    <Layout />
     <MsalProvider instance={msalInstance}>
       <App />
     </MsalProvider>

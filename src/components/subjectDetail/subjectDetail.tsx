@@ -78,9 +78,9 @@ const SubjectDetail: React.FC<Props> = ({
           subject.Grupo
         );
         setMateriaAlumno(response.data);
-      } catch (err) {
+      } catch (err: any) {
         setError('Error fetching alumnos data.');
-        console.error('Error fetching alumnos:', err);
+        throw new Error('Error fetching alumnos data.' + err.message);
       } finally {
         setIsLoading(false);
       }

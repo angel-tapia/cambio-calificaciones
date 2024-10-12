@@ -1,7 +1,7 @@
+import './App.css';
 import { useEffect, useState } from 'react';
 import { initializeIcons, PrimaryButton, TextField } from '@fluentui/react';
 import { useIsAuthenticated, useMsal } from '@azure/msal-react';
-import './App.css';
 import { Login } from './components/login/login';
 import UserDetail from './components/userDetail/userDetail';
 import { getMatricula } from './endpoints/getMatricula';
@@ -28,8 +28,8 @@ const MainContent = () => {
           if (e.response && e.response.status === 404) {
             setShowMatriculaInput(true);
           } else {
-            console.error('Error fetching the matricula from the email:', e);
             setError('An error occurred while fetching the matricula.');
+            throw new Error('An error occurred while fetching the matricula.');
           }
         }
       };
@@ -38,11 +38,7 @@ const MainContent = () => {
   }, [isAuthenticated]);
 
   if (isFetching) {
-    return (
-      <>
-        <UserDetail employeeId={matricula} />
-      </>
-    );
+    return <UserDetail employeeId={matricula} />;
   }
 
   return (
@@ -71,7 +67,6 @@ const MainContent = () => {
               </PrimaryButton>
             </>
           ) : (
-            // Optionally, show a loading indicator while fetching
             <p>Cargando su información...</p>
           )}
         </>

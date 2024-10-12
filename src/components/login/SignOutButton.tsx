@@ -12,5 +12,5 @@ export const SignOutButton = () => {
     });
   };
 
-  return <PrimaryButton onClick={() => handleLogout()}>Sign Out</PrimaryButton>;
+  return <PrimaryButton onClick={() => handleLogout()}>Salir</PrimaryButton>;
 };

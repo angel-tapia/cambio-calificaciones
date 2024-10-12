@@ -5,3 +5,11 @@
   height: 30vh; /* Full height of the viewport */
   width: 100vw; /* Full width of the viewport */
 }
+
+.top-right-corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 10px; /* Adjust as needed */
+  text-align: right;
+}
