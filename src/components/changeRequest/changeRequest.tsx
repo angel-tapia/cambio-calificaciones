@@ -225,9 +225,10 @@ const ChangeRequest: React.FC<Props> = ({
           isBlocking: true,
           styles: {
             main: {
-              width: '500px',
-              maxWidth: '80vw',
-              maxHeight: '80vh',
+              width: '80vw', // Set a percentage-based width for responsiveness
+              height: '80vh', // Set a percentage-based height for responsiveness
+              minWidth: '600px', // Ensure a minimum width
+              minHeight: '500px', // Ensure a minimum height
             },
           },
         }}
