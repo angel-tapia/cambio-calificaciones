@@ -73,29 +73,7 @@ const ChangeRequest: React.FC<Props> = ({
   >(undefined);
   const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
 
-  const validateCalificacionIncorrecta = (calificacion: string) => {
-    if (!calificacion) {
-      return 'Calificación es requerida.';
-    }
-
-    if (materiaAlumno.NombreMateria === 'Servicio social') {
-      return calificacion !== 'CU' && calificacion !== 'NC'
-        ? 'Calificación debe ser "CU" o "NC".'
-        : undefined;
-    } else {
-      if (isNaN(parseInt(calificacion)) && calificacion !== 'NP') {
-        return 'Calificación debe ser NP o un número.';
-      }
-
-      if (parseInt(calificacion) < 0 || parseInt(calificacion) > 100) {
-        return 'Calificación debe estar entre 0 y 100.';
-      }
-    }
-
-    return undefined;
-  };
-
-  const validateCalificacionCorrecta = (calificacion: string) => {
+  const validateCalificacion = (calificacion: string) => {
     if (!calificacion) {
       return 'Calificación es requerida.';
     }
@@ -183,7 +161,7 @@ const ChangeRequest: React.FC<Props> = ({
                 label="Calificación Incorrecta"
                 onChange={(_, newValue) => {
                   setErrorCalificacionIncorrecta(
-                    validateCalificacionIncorrecta(newValue || '')
+                    validateCalificacion(newValue || '')
                   );
                   setCalificacionesIncorrectas((prev) => ({
                     ...prev,
@@ -197,7 +175,7 @@ const ChangeRequest: React.FC<Props> = ({
                 label="Calificación Correcta"
                 onChange={(_, newValue) => {
                   setErrorCalificacionCorrecta(
-                    validateCalificacionCorrecta(newValue || '')
+                    validateCalificacion(newValue || '')
                   );
                   setCalificacionesCorrectas((prev) => ({
                     ...prev,
@@ -247,22 +225,24 @@ const ChangeRequest: React.FC<Props> = ({
           isBlocking: true,
         }}
       >
-        {alumnos.map((alumno) => (
-          <Stack key={alumno.Matricula} tokens={stackTokensVertical}>
-            <Text>
-              Alumno: {alumno.Nombre} ({alumno.Matricula})
-            </Text>
-            <Text>
-              Calificación Incorrecta:
-              {calificacionesIncorrectas[alumno.Matricula]}
-            </Text>
-            <Text>
-              Calificación Correcta:
-              {calificacionesCorrectas[alumno.Matricula]}
-            </Text>
-          </Stack>
-        ))}
-        <Text style={{ wordBreak: 'break-word' }}>Motivo: {motivo}</Text>
+        <Stack tokens={stackTokensVertical}>
+          {alumnos.map((alumno) => (
+            <Stack key={alumno.Matricula} tokens={stackTokensVertical}>
+              <Text>
+                Alumno: {alumno.Nombre} ({alumno.Matricula})
+              </Text>
+              <Text>
+                Calificación Incorrecta:
+                {calificacionesIncorrectas[alumno.Matricula]}
+              </Text>
+              <Text>
+                Calificación Correcta:
+                {calificacionesCorrectas[alumno.Matricula]}
+              </Text>
+            </Stack>
+          ))}
+          <Text style={{ wordBreak: 'break-word' }}>Motivo: {motivo}</Text>
+        </Stack>
         <DialogFooter>
           <DefaultButton
             onClick={() => setIsDialogVisible(false)}
