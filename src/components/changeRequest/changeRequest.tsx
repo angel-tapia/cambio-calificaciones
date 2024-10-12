@@ -223,6 +223,13 @@ const ChangeRequest: React.FC<Props> = ({
         }}
         modalProps={{
           isBlocking: true,
+          styles: {
+            main: {
+              width: '500px',
+              maxWidth: '80vw',
+              maxHeight: '80vh',
+            },
+          },
         }}
       >
         <Stack tokens={stackTokensVertical}>
