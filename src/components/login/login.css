@@ -8,8 +8,6 @@
 
 .top-right-corner {
   position: absolute;
-  top: 0;
-  right: 0;
-  margin: 10px; /* Adjust as needed */
-  text-align: right;
+  top: 10px;
+  right: 10px;
 }

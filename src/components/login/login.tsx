@@ -9,18 +9,18 @@ export const Login = (props: any) => {
 
   return (
     <>
-      <div className="top-right-corner">
-        {isAuthenticated ? (
+      {isAuthenticated ? (
+        <div className="top-right-corner">
           <SignOutButton />
-        ) : (
-          <>
-            <center>
-              <h5>Bienvenido/a a la página de Cambio de Calificaciones.</h5>
-              <SignInButton />
-            </center>
-          </>
-        )}
-      </div>
+        </div>
+      ) : (
+        <>
+          <center>
+            <h5>Bienvenido/a a la página de Cambio de Calificaciones.</h5>
+            <SignInButton />
+          </center>
+        </>
+      )}
       {props.children}
     </>
   );
