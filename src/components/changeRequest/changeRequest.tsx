@@ -222,32 +222,13 @@ const ChangeRequest: React.FC<Props> = ({
           closeButtonAriaLabel: 'Cerrar',
           styles: {
             content: {
-              width: '100%', // Ensures the content takes up the full width of the dialog
-              height: '100%', // Ensures the content takes up the full height of the dialog
+              width: '100%',
+              height: '100%',
             },
           },
         }}
         modalProps={{
           isBlocking: true,
-          styles: {
-            root: {
-              width: '80vw',
-              height: '80vh',
-            },
-            main: {
-              width: '80vw',
-              height: '80vh',
-              minWidth: '600px',
-              minHeight: '500px',
-              maxWidth: 'none', // Ensure no max-width constraint
-            },
-            scrollableContent: {
-              display: 'flex',
-              flexDirection: 'column',
-              width: '100%',
-              height: '100%',
-            },
-          },
         }}
       >
         <Stack tokens={stackTokensVertical}>
