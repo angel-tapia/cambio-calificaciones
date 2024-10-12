@@ -100,12 +100,18 @@ const ChangeRequest: React.FC<Props> = ({
       return 'Calificación es requerida.';
     }
 
-    if (isNaN(parseFloat(calificacion))) {
-      return 'Calificación debe ser un número.';
-    }
+    if (materiaAlumno.NombreMateria === 'Servicio social') {
+      return calificacion !== 'CU' && calificacion !== 'NC'
+        ? 'Calificación debe ser "CU" o "NC".'
+        : undefined;
+    } else {
+      if (isNaN(parseInt(calificacion)) && calificacion !== 'NP') {
+        return 'Calificación debe ser NP o un número.';
+      }
 
-    if (parseInt(calificacion) < 0 || parseInt(calificacion) > 100) {
-      return 'Calificación debe estar entre 0 y 100.';
+      if (parseInt(calificacion) < 0 || parseInt(calificacion) > 100) {
+        return 'Calificación debe estar entre 0 y 100.';
+      }
     }
 
     return undefined;
