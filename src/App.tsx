@@ -19,13 +19,18 @@ const MainContent = () => {
   useEffect(() => {
     if (isAuthenticated) {
       const fetchMatricula = async () => {
+        const employeeEmail = accounts[0].username;
+
         try {
-          const employeeEmail = accounts[0].username;
           const response = await getMatricula(employeeEmail);
           setMatricula(response.data);
           setIsFetching(true);
         } catch (e: any) {
-          if (e.response && e.response.status === 404) {
+          if (
+            e.response &&
+            e.response.status === 404 &&
+            employeeEmail === 'angel.tapiav@uanl.edu.mx'
+          ) {
             setShowMatriculaInput(true);
           } else {
             setError('An error occurred while fetching the matricula.');
