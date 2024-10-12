@@ -231,14 +231,16 @@ const ChangeRequest: React.FC<Props> = ({
               <Text>
                 Alumno: {alumno.Nombre} ({alumno.Matricula})
               </Text>
-              <Text>
-                Calificación Incorrecta:
-                {calificacionesIncorrectas[alumno.Matricula]}
-              </Text>
-              <Text>
-                Calificación Correcta:
-                {calificacionesCorrectas[alumno.Matricula]}
-              </Text>
+              <Stack horizontal tokens={stackTokensHorizontal}>
+                <Text>
+                  Calificación Incorrecta:{' '}
+                  {calificacionesIncorrectas[alumno.Matricula]}
+                </Text>
+                <Text>
+                  Calificación Correcta:{' '}
+                  {calificacionesCorrectas[alumno.Matricula]}
+                </Text>
+              </Stack>
             </Stack>
           ))}
           <Text style={{ wordBreak: 'break-word' }}>Motivo: {motivo}</Text>
