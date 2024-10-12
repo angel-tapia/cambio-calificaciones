@@ -78,12 +78,10 @@ const ChangeRequest: React.FC<Props> = ({
       return 'Calificación es requerida.';
     }
 
-    if (
-      materiaAlumno.NombreMateria === 'Servicio social' &&
-      calificacion !== 'CU' &&
-      calificacion !== 'NC'
-    ) {
-      return 'Calificación debe ser "CU" o "NC".';
+    if (materiaAlumno.NombreMateria === 'Servicio social') {
+      return calificacion !== 'CU' && calificacion !== 'NC'
+        ? 'Calificación debe ser "CU" o "NC".'
+        : undefined;
     } else {
       if (isNaN(parseInt(calificacion)) && calificacion !== 'NP') {
         return 'Calificación debe ser NP o un número.';
