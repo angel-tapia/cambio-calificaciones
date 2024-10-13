@@ -18,6 +18,7 @@ export const Login = (props: any) => {
           <SignInButton />
         </center>
       )}
+      <br />
       {props.children}
     </div>
   );
