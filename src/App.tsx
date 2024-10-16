@@ -18,7 +18,7 @@ const MainContent = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      sessionStorage.setItem('Token', accounts[0].idToken);
+      sessionStorage.setItem('Token', accounts[0].idToken!);
       const fetchMatricula = async () => {
         const employeeEmail = accounts[0].username;
 
