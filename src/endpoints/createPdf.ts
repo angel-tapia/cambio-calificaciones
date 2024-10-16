@@ -15,10 +15,13 @@ export function createPdf(
   academia: string,
   nombreCoordinador: string
 ) {
+  const TOKEN = sessionStorage.getItem('Token');
+
   const apiClient = axios.create({
     baseURL: `${BASE_URL}`,
     headers: {
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + TOKEN,
     },
     responseType: 'blob',
   });
