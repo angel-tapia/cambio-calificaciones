@@ -10,7 +10,7 @@ initializeIcons();
 
 const MainContent = () => {
   const isAuthenticated = useIsAuthenticated();
-  const { accounts } = useMsal();
+  const { instance, accounts } = useMsal();
   const [matricula, setMatricula] = useState<string>('');
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
@@ -43,6 +43,7 @@ const MainContent = () => {
   }, [isAuthenticated]);
 
   if (isFetching) {
+    console.log('token here: ' + instance.getTokenCache());
     return <UserDetail employeeId={matricula} />;
   }
 
